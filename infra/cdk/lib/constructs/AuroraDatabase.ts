@@ -38,7 +38,7 @@ export class AuroraDatabase extends Construct {
     // 3. Create Aurora Serverless v2 PostgreSQL Cluster
     this.cluster = new rds.DatabaseCluster(this, 'AuroraCluster', {
       engine: rds.DatabaseClusterEngine.auroraPostgres({
-        version: rds.AuroraPostgresEngineVersion.VER_15_5, // Highly compatible with Prisma
+        version: rds.AuroraPostgresEngineVersion.VER_15_14, // Highly compatible with Prisma
       }),
       writer: rds.ClusterInstance.serverlessV2('Writer'),
       serverlessV2MinCapacity: 0.5,
