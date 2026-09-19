@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import { prisma } from '@ondc-pulse/database';
 import { z } from 'zod';
+import { ordersRepository } from './orders.repository.js';
+import { eventsRepository } from '../events/events.repository.js';
 
 const idParamSchema = z.object({
   id: z.string().uuid(),
@@ -9,13 +10,9 @@ const idParamSchema = z.object({
 export const orderRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   fastify.get('/:id', async (request, reply) => {
     const { id } = idParamSchema.parse(request.params);
+    const tenantId = request.tenantId!;
     
-    const order = await prisma.order.findUnique({
-      where: { id },
-      include: {
-        tenant: { select: { name: true, slug: true } },
-      }
-    });
+    const order = await ordersRepository.findById(id, tenantId);
 
     if (!order) {
       return reply.status(404).send({ error: 'Order not found' });
@@ -26,11 +23,9 @@ export const orderRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) 
 
   fastify.get('/:id/events', async (request, reply) => {
     const { id } = idParamSchema.parse(request.params);
+    const tenantId = request.tenantId!;
     
-    const events = await prisma.orderEvent.findMany({
-      where: { orderId: id },
-      orderBy: { eventTimestamp: 'asc' }
-    });
+    const events = await eventsRepository.findByOrderId(id, tenantId);
 
     return reply.send({ data: events });
   });
