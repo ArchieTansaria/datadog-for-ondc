@@ -4,6 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import { FoundationStack } from '../lib/stacks/FoundationStack';
 import { DatabaseStack } from '../lib/stacks/DatabaseStack';
 import { ApiStack } from '../lib/stacks/ApiStack';
+import { MetricsStack } from '../lib/stacks/MetricsStack';
 
 const app = new cdk.App();
 const foundationStack = new FoundationStack(app, 'OndcPulseFoundationStack', {
@@ -17,6 +18,10 @@ new DatabaseStack(app, 'OndcPulseDatabaseStack', {
 new ApiStack(app, 'OndcPulseApiStack', {
   rawEventsBucket: foundationStack.ingestionStorage.rawEventsBucket,
   processingQueue: foundationStack.processingQueues.mainQueue,
+});
+
+new MetricsStack(app, 'OndcPulseMetricsStack', {
+  internalEventBus: foundationStack.internalEventBus,
 });
 
   /* If you don't specify 'env', this stack will be environment-agnostic.

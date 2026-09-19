@@ -16,5 +16,10 @@ describe('FoundationStack', () => {
 
     // It should have 2 queues (Main + DLQ)
     template.resourceCountIs('AWS::SQS::Queue', 2);
+
+    // It should have the internal event bus
+    template.hasResourceProperties('AWS::Events::EventBus', {
+      Name: 'OndcPulseInternalBus',
+    });
   });
 });
