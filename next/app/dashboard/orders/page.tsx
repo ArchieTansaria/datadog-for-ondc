@@ -14,8 +14,8 @@ export default function OrdersTracePage() {
 <span className="text-zinc-700">·</span>
 <span className="font-mono text-[11px] text-zinc-500">ap-south-1 (AWS Mumbai)</span>
 </div>
-<h1 className="text-xl md:text-2xl font-semibold tracking-[-0.03em] text-zinc-100 tracking-tight">Order Lifecycle &amp; State Trace</h1>
-<p className="text-[13px] leading-relaxed text-zinc-400 max-w-2xl">
+<h1 className="text-xl md:text-2xl font-mono text-white tracking-tight">Order Lifecycle &amp; State Trace</h1>
+<p className="font-mono text-[12px] leading-relaxed text-zinc-400 max-w-2xl">
           Deterministic execution logs, asynchronous callback resolution latencies, and distributed state machine verifications across federated BAP/BPP nodes.
         </p>
 </div>

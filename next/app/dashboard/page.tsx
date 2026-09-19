@@ -9,7 +9,7 @@ export default function OverviewPage() {
 <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1">
             00 / OBSERVABILITY ENGINE
           </div>
-<h1 className="text-xl md:text-2xl font-semibold tracking-[-0.03em] text-white">
+<h1 className="text-xl md:text-2xl font-mono text-white tracking-tight">
             Core Ingestion Overview
           </h1>
 </div>
