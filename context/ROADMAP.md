@@ -18,7 +18,8 @@ All AI agents must update this document upon the completion of assigned tasks.
 
 - [ ] Define precise deterministic state machine rules.
 - [ ] Setup AWS API Gateway and Lambda handlers for ONDC event webhooks.
-- [ ] Implement robust DLQs (Dead Letter Queues) via SQS.
+- [x] Establish AWS CDK Foundation (S3, IAM).
+- [x] Implement robust DLQs (Dead Letter Queues) via SQS.
 - [ ] Deploy Amazon Aurora Serverless for production PostgreSQL.
 
 ## Phase 3: Observability, Alerts & AI (Future)
