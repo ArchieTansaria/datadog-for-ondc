@@ -23,7 +23,7 @@ All AI agents must update this document upon the completion of assigned tasks.
 - [x] Establish AWS CDK Foundation (S3, IAM) (Owner: AI)
 - [x] Implement robust DLQs (Dead Letter Queues) via SQS (Owner: AI)
 - [ ] Setup AWS API Gateway and Lambda handlers for ONDC event webhooks.
-- [ ] Deploy Amazon Aurora Serverless for production PostgreSQL.
+- [x] Deploy Amazon Aurora Serverless for production PostgreSQL (Owner: AI).
 
 ## Phase 3: Observability, Alerts & AI (Future)
 *Enable intelligent evaluation, monitoring, and Dashboards.*
