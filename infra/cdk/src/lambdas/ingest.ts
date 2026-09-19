@@ -67,6 +67,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       timestamp: context.timestamp,
       participantId: context.action.startsWith('on_') ? context.bpp_id : context.bap_id,
       participantRole: context.action.startsWith('on_') ? 'SELLER' : 'BUYER',
+      domain: context.domain,
       rawPayloadUri: `s3://${bucketName}/${s3Key}`
     };
 

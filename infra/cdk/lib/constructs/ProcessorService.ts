@@ -38,6 +38,21 @@ export class ProcessorService extends Construct {
       bundling: {
         minify: true,
         sourceMap: true,
+        commandHooks: {
+          beforeBundling(_inputDir: string, _outputDir: string): string[] {
+            return [];
+          },
+          beforeInstall(_inputDir: string, _outputDir: string): string[] {
+            return [];
+          },
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            return [
+              `mkdir -p ${outputDir}/node_modules/.prisma/client`,
+              `cp ${inputDir}/node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node ${outputDir}/node_modules/.prisma/client/`,
+              `cp ${inputDir}/node_modules/.prisma/client/schema.prisma ${outputDir}/node_modules/.prisma/client/`
+            ];
+          },
+        },
       },
     });
 
