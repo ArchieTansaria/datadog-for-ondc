@@ -20,8 +20,8 @@ export default function IncidentsPage() {
 </div>
 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
 <div className="space-y-1.5 max-w-3xl">
-<h1 className="text-xl md:text-2xl font-semibold tracking-[-0.03em] text-zinc-300 tracking-tight font-medium">Incident &amp; Anomaly Queue</h1>
-<p className="text-[13px] leading-relaxed text-zinc-400 leading-relaxed">
+<h1 className="text-xl md:text-2xl font-mono text-white tracking-tight">Incident &amp; Anomaly Queue</h1>
+<p className="font-mono text-[12px] text-zinc-400 leading-relaxed">
           Deterministic failure correlation, automated cluster triage, and Bedrock LLM synthesis across federated Beckn participants.
         </p>
 </div>
@@ -80,7 +80,7 @@ export default function IncidentsPage() {
 </div>
 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-300">SEV-1 CRITICAL</span>
 </div>
-<p className="text-base font-medium text-white leading-tight mb-2">
+<p className="font-mono text-[12px] text-white leading-tight mb-2">
             15 Orders failed at /on_confirm (Timeout &gt; 120s)
           </p>
 <div className="grid grid-cols-2 gap-y-1 font-mono text-[10px] text-zinc-400">
@@ -106,7 +106,7 @@ export default function IncidentsPage() {
 </div>
 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-rose-400">CRITICAL</span>
 </div>
-<p className="text-[13px] leading-relaxed text-white line-clamp-1">
+<p className="font-mono text-[12px] text-zinc-300 line-clamp-1">
             Ed25519 signature verification failure on /on_select
           </p>
 <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
@@ -123,7 +123,7 @@ export default function IncidentsPage() {
 </div>
 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400">HIGH</span>
 </div>
-<p className="text-[13px] leading-relaxed text-white line-clamp-1">
+<p className="font-mono text-[12px] text-zinc-300 line-clamp-1">
             Cascading 504 Gateway Timeout during /init state transition
           </p>
 <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
@@ -140,7 +140,7 @@ export default function IncidentsPage() {
 </div>
 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400">HIGH</span>
 </div>
-<p className="text-[13px] leading-relaxed text-white line-clamp-1">
+<p className="font-mono text-[12px] text-zinc-300 line-clamp-1">
             Invalid ACK format schema violation (context.action mismatch)
           </p>
 <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
@@ -157,7 +157,7 @@ export default function IncidentsPage() {
 </div>
 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-950 text-zinc-500">WARNING</span>
 </div>
-<p className="text-[13px] leading-relaxed text-zinc-400 line-clamp-1">
+<p className="font-mono text-[12px] text-zinc-400 line-clamp-1">
             Kafka partition rebalance lag spike (&gt;140ms)
           </p>
 <div className="flex items-center justify-between font-mono text-[10px] text-zinc-600 pt-1">
@@ -182,10 +182,10 @@ export default function IncidentsPage() {
 <span className="px-2 py-0.5 rounded bg-zinc-900 text-zinc-500">DETECTED: 14:21:40 UTC</span>
 </div>
 <div>
-<h2 className="text-lg md:text-xl font-medium tracking-tight text-zinc-300 tracking-tight">
+<h2 className="text-lg md:text-xl font-mono text-white tracking-tight">
             Logistics State Machine Lockout: /on_status Timeout
           </h2>
-<p className="text-[13px] leading-relaxed text-zinc-400 mt-1">
+<p className="font-mono text-[12px] text-zinc-400 leading-relaxed mt-1">
             Target BPP failed to deliver asynchronous callback payload within strict protocol bounds, stranding active buyer state transitions.
           </p>
 </div>
@@ -201,7 +201,7 @@ export default function IncidentsPage() {
 </div>
 <span className="font-mono text-[10px] text-zinc-500">Synthesized in 1.4s · Bedrock Serverless</span>
 </div>
-<p className="text-[13px] leading-relaxed text-white leading-relaxed">
+<p className="font-mono text-[11px] text-zinc-300 leading-relaxed">
             The logistics assignment callback (<code className="font-mono text-zinc-300 px-1 rounded bg-zinc-950">/on_status</code>) failed to arrive within the configured 2-minute SLA for 15 orders routed through Participant <span className="font-mono text-zinc-300">bpp.shadowfax.in</span>. This indicates a downstream gateway timeout or dispatch queue deadlock in availability zone <span className="font-mono text-white">ap-south-1b</span>. The BAP correctly attempted 3 exponential backoff retries before entering terminal SLA breach state.
           </p>
 {/*  Contributing Factors Checklist  */}
