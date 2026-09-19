@@ -1,8 +1,11 @@
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   return (
     <div className="bg-[#08080a] text-zinc-300 antialiased selection:bg-white selection:text-black min-h-screen">
       <header className="fixed top-0 left-0 right-0 h-12 bg-[#08080a]/90 backdrop-blur-md z-50 flex items-center justify-between px-5 border-b border-white/[0.07]">
@@ -51,34 +54,46 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 <div>
 <div className="px-2 mb-2 text-[10px] font-mono uppercase tracking-widest text-zinc-600">Core Telemetry</div>
 <nav className="flex flex-col space-y-0.5 text-[13px]">
-<a className="flex items-center justify-between px-2.5 py-1.5 rounded bg-white/[0.05] text-white font-medium" href="/dashboard">
+<Link 
+  href="/dashboard" 
+  className={`flex items-center justify-between px-2.5 py-1.5 rounded transition-colors ${pathname === '/dashboard' ? 'bg-white/[0.05] text-white font-medium' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
+>
 <span className="flex items-center gap-2">
-<span className="w-1 h-1 rounded-full bg-white"></span>
+<span className={`w-1 h-1 rounded-full ${pathname === '/dashboard' ? 'bg-white' : 'bg-transparent'}`}></span>
               Overview
             </span>
 <span className="text-[10px] font-mono text-zinc-500">LIVE</span>
-</a>
-<a className="flex items-center justify-between px-2.5 py-1.5 rounded text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="/dashboard">
+</Link>
+<Link 
+  href="/dashboard/orders" 
+  className={`flex items-center justify-between px-2.5 py-1.5 rounded transition-colors ${pathname === '/dashboard/orders' ? 'bg-white/[0.05] text-white font-medium' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
+>
 <span className="flex items-center gap-2">
-<span className="w-1 h-1 rounded-full bg-transparent"></span>
+<span className={`w-1 h-1 rounded-full ${pathname === '/dashboard/orders' ? 'bg-white' : 'bg-transparent'}`}></span>
               Orders Trace
             </span>
 <span className="text-[10px] font-mono text-zinc-600">BAP/BPP</span>
-</a>
-<a className="flex items-center justify-between px-2.5 py-1.5 rounded text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="/dashboard">
+</Link>
+<Link 
+  href="/dashboard/incidents" 
+  className={`flex items-center justify-between px-2.5 py-1.5 rounded transition-colors ${pathname === '/dashboard/incidents' ? 'bg-white/[0.05] text-white font-medium' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
+>
 <span className="flex items-center gap-2">
-<span className="w-1 h-1 rounded-full bg-transparent"></span>
+<span className={`w-1 h-1 rounded-full ${pathname === '/dashboard/incidents' ? 'bg-white' : 'bg-transparent'}`}></span>
               Exceptions &amp; AI
             </span>
 <span className="w-1 h-1 rounded-full bg-zinc-400"></span>
-</a>
-<a className="flex items-center justify-between px-2.5 py-1.5 rounded text-zinc-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="/dashboard">
+</Link>
+<Link 
+  href="/dashboard/simulate" 
+  className={`flex items-center justify-between px-2.5 py-1.5 rounded transition-colors ${pathname === '/dashboard/simulate' ? 'bg-white/[0.05] text-white font-medium' : 'text-zinc-400 hover:text-white hover:bg-white/[0.03]'}`}
+>
 <span className="flex items-center gap-2">
-<span className="w-1 h-1 rounded-full bg-transparent"></span>
+<span className={`w-1 h-1 rounded-full ${pathname === '/dashboard/simulate' ? 'bg-white' : 'bg-transparent'}`}></span>
               Simulation
             </span>
 <span className="text-[10px] font-mono text-zinc-600">SBX</span>
-</a>
+</Link>
 </nav>
 </div>
 <div>
