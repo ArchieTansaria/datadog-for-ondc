@@ -330,7 +330,7 @@ export default function IncidentsPage() {
 </div>
 {/*  Compact Code Payload Preview  */}
 <div className="mt-3 p-3 rounded-lg bg-background text-zinc-500 font-mono text-[11px] overflow-x-auto">
-<span className="text-zinc-300">{"{"}&quot;context&quot;:</span> {"{"}&quot;domain&quot;: "nic2004:52110", "action": "on_status", "bpp_id": "bpp.shadowfax.in", "timestamp": "2025-02-27T14:21:40.102Z"}, <span className="text-rose-400">&quot;error":</span> {"{"}&quot;type&quot;: "GATEWAY_TIMEOUT", "code": "30005", "message": "Participant callback deadline exceeded: 120000ms&quot;{"}"{"}"} <span className="text-zinc-300">{"}"}</span>
+<span className="text-zinc-300">{"{"}&quot;context&quot;:</span> {"{"}&quot;domain&quot;: &quot;nic2004:52110&quot;, &quot;action&quot;: &quot;on_status&quot;, &quot;bpp_id&quot;: &quot;bpp.shadowfax.in&quot;, &quot;timestamp&quot;: &quot;2025-02-27T14:21:40.102Z&quot;{"}"}, <span className="text-rose-400">&quot;error&quot;:</span> {"{"}&quot;type&quot;: &quot;GATEWAY_TIMEOUT&quot;, &quot;code&quot;: &quot;30005&quot;, &quot;message&quot;: &quot;Participant callback deadline exceeded: 120000ms&quot;{"}"} <span className="text-zinc-300">{"}"}</span>
 </div>
 </div>
 </section>

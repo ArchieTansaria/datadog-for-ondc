@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
-    <div className="bg-[#08080a] text-zinc-300 antialiased selection:bg-white selection:text-black min-h-screen">
+    <div className="bg-[#08080a] text-zinc-300 antialiased selection:bg-zinc-800 selection:text-zinc-100 min-h-screen">
       <header className="fixed top-0 left-0 right-0 h-12 bg-[#08080a]/90 backdrop-blur-md z-50 flex items-center justify-between px-5 border-b border-white/[0.07]">
 <div className="flex items-center gap-5">
 <a className="flex items-center gap-2 text-white group cursor-pointer" href="/dashboard">
