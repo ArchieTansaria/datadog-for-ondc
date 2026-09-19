@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "npm run dev -ws",
     "build": "npm run build -ws",
-    "test": "vitest",
+    "test": "vitest --pool=forks",
     "lint": "eslint .",
     "format": "prettier --write .",
     "db:up": "docker compose -f docker/docker-compose.yml up -d",

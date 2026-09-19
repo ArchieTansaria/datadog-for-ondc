@@ -15,12 +15,15 @@
     "@types/node": "^24.10.1",
     "@types/source-map-support": "^0.5.10",
     "aws-cdk": "2.1142.0",
+    "aws-lambda": "^1.0.7",
     "jest": "^30",
     "source-map-support": "^0.5.21",
     "tsx": "^4.23.0",
     "typescript": "~7.0.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1136.0",
+    "@aws-sdk/client-sqs": "^3.1136.0",
     "aws-cdk-lib": "^2.269.0",
     "constructs": "^10.5.0"
   }

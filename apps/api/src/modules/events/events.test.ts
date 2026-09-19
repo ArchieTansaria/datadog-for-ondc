@@ -9,8 +9,8 @@ describe('Events API Integration - Webhook Ingestion', () => {
   let tenantA: any;
   const API_KEY = `test-key-${crypto.randomUUID()}`;
   const TX_ID = `tx-${crypto.randomUUID()}`;
-  let messageIdSearch = `msg-search-${crypto.randomUUID()}`;
-  let messageIdInit = `msg-init-${crypto.randomUUID()}`;
+  const messageIdSearch = `msg-search-${crypto.randomUUID()}`;
+  const messageIdInit = `msg-init-${crypto.randomUUID()}`;
   let orderId: string;
 
   beforeAll(async () => {

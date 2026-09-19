@@ -1,10 +1,12 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { IngestionApi } from '../constructs/IngestionApi';
 
 export interface ApiStackProps extends StackProps {
   rawEventsBucket: s3.IBucket;
+  processingQueue: sqs.IQueue;
 }
 
 export class ApiStack extends Stack {
@@ -15,6 +17,7 @@ export class ApiStack extends Stack {
 
     this.ingestionApi = new IngestionApi(this, 'IngestionApi', {
       rawEventsBucket: props.rawEventsBucket,
+      processingQueue: props.processingQueue,
     });
   }
 }

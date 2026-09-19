@@ -8,8 +8,11 @@ describe('Orders API & Auth Integration', () => {
   let app: FastifyInstance;
   
   // Test Fixtures
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let tenantA: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let tenantB: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let orderA: any;
   
   const API_KEY_A = `test-key-a-${crypto.randomUUID()}`;

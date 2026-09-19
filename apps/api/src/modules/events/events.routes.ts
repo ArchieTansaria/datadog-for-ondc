@@ -5,23 +5,7 @@ import { ordersRepository } from '../orders/orders.repository.js';
 import { stateMachineService } from './state-machine.service.js';
 import crypto from 'crypto';
 
-// The expected shape of an incoming ONDC Webhook Payload (simplified for Phase 2)
-const webhookPayloadSchema = z.object({
-  context: z.object({
-    domain: z.string(),
-    action: z.string(),
-    bap_id: z.string(),
-    bpp_id: z.string(),
-    transaction_id: z.string(),
-    message_id: z.string(), // used as idempotency key
-    timestamp: z.string(),
-  }),
-  message: z.object({
-    order: z.object({
-      id: z.string().optional(),
-    }).optional()
-  }).optional()
-});
+import { webhookPayloadSchema } from './schema.js';
 
 export const eventRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
   fastify.post('/webhook', async (request, reply) => {
@@ -46,7 +30,7 @@ export const eventRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) 
     // 3. Find or Create Order
     let order = await ordersRepository.findByTransactionId(context.transaction_id, tenantId, 'PROD'); // Hardcoded PROD for now
     
-    let targetState = stateMachineService.deriveStateFromAction(context.action);
+    const targetState = stateMachineService.deriveStateFromAction(context.action);
     let validationStatus = 'VALID';
 
     if (!order) {

@@ -16,6 +16,7 @@ new DatabaseStack(app, 'OndcPulseDatabaseStack', {
 
 new ApiStack(app, 'OndcPulseApiStack', {
   rawEventsBucket: foundationStack.ingestionStorage.rawEventsBucket,
+  processingQueue: foundationStack.processingQueues.mainQueue,
 });
 
   /* If you don't specify 'env', this stack will be environment-agnostic.
