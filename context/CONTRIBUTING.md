@@ -10,11 +10,11 @@ Welcome! This repository is heavily co-developed by human engineers and AI codin
 ## Human-AI Collaboration Rules
 - **For Humans**: Be extremely explicit in your prompts. Specify if you want the AI to explore, or if you want it to execute a highly defined task.
 - **For AIs**: 
-    - Read `AGENTS.md` before executing any task.
+    - Read `context/AGENTS.md` before executing any task.
     - Never assume API endpoints or AWS structures without confirming the existing codebase.
     - If a task conflicts with existing code authored by another agent, ask the human for conflict resolution rather than unilaterally overwriting it.
     - Validate work constantly: run unit tests and type checks.
-- **Documentation**: Both humans and AIs are responsible for keeping `ROADMAP.md` up to date.
+- **Documentation**: Both humans and AIs are responsible for keeping `context/ROADMAP.md` up to date.
 
 ## Code Quality Standards
 - **TypeScript Strictness**: `strict: true` must remain enforced. Do not use `any` unless absolutely necessary and documented.
