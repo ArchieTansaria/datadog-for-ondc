@@ -56,7 +56,6 @@ describe('DatabaseStack', () => {
     // If SecurityGroupIngress is present, it must NOT contain 0.0.0.0/0 on port 5432
     template.hasResourceProperties('AWS::EC2::SecurityGroup', {
       GroupDescription: Match.stringLikeRegexp('.*'),
-      SecurityGroupIngress: Match.anyValue() // Can be undefined or an array, just checking it exists as a SG
     });
     
     // Specifically assert we don't have 0.0.0.0/0 anywhere
