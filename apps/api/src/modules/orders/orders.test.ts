@@ -24,10 +24,20 @@ describe('Orders Routes', () => {
     await prisma.$disconnect();
   });
 
-  it('GET /api/v1/orders/:id should return order details', async () => {
+  it('GET /api/v1/orders/:id should return 401 without API key', async () => {
     const response = await app.inject({
       method: 'GET',
       url: `/api/v1/orders/${seededOrderId}`
+    });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  it('GET /api/v1/orders/:id should return order details', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: `/api/v1/orders/${seededOrderId}`,
+      headers: { 'x-api-key': 'test-api-key-123' }
     });
 
     expect(response.statusCode).toBe(200);
@@ -40,7 +50,8 @@ describe('Orders Routes', () => {
   it('GET /api/v1/orders/:id/events should return chronological events', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: `/api/v1/orders/${seededOrderId}/events`
+      url: `/api/v1/orders/${seededOrderId}/events`,
+      headers: { 'x-api-key': 'test-api-key-123' }
     });
 
     expect(response.statusCode).toBe(200);

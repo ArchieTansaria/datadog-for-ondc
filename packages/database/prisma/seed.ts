@@ -10,6 +10,7 @@ async function main() {
     data: {
       name: 'Acme Corp',
       slug: 'acme-corp',
+      apiKey: 'test-api-key-123',
     },
   });
 

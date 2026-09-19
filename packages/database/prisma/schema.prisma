@@ -11,6 +11,7 @@ model Tenant {
   id        String   @id @default(uuid()) @db.Uuid
   name      String
   slug      String   @unique
+  apiKey    String   @unique @map("api_key")
   status    String   @default("ACTIVE")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
