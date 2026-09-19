@@ -11,13 +11,16 @@ const foundationStack = new FoundationStack(app, 'OndcPulseFoundationStack', {
   // ...
 });
 
-new DatabaseStack(app, 'OndcPulseDatabaseStack', {
+const databaseStack = new DatabaseStack(app, 'OndcPulseDatabaseStack', {
   // ...
 });
 
 new ApiStack(app, 'OndcPulseApiStack', {
   rawEventsBucket: foundationStack.ingestionStorage.rawEventsBucket,
   processingQueue: foundationStack.processingQueues.mainQueue,
+  vpc: databaseStack.database.vpc,
+  databaseSecurityGroup: databaseStack.database.securityGroup,
+  databaseSecret: databaseStack.database.cluster.secret!,
 });
 
 new MetricsStack(app, 'OndcPulseMetricsStack', {

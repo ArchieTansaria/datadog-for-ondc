@@ -2,6 +2,8 @@ import * as cdk from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { ApiStack } from '../lib/stacks/ApiStack';
 
 describe('ApiStack', () => {
@@ -12,14 +14,25 @@ describe('ApiStack', () => {
   beforeAll(() => {
     app = new cdk.App();
     
-    // Create a mock bucket and queue to pass as dependencies
     const dummyStack = new cdk.Stack(app, 'DummyStack');
-    const dummyBucket = new s3.Bucket(dummyStack, 'DummyBucket');
-    const dummyQueue = new sqs.Queue(dummyStack, 'DummyQueue');
+    const dummyBucket = s3.Bucket.fromBucketName(dummyStack, 'DummyBucket', 'dummy-bucket');
+    const dummyQueue = sqs.Queue.fromQueueArn(dummyStack, 'DummyQueue', 'arn:aws:sqs:us-east-1:123456789012:dummy-queue');
+    const dummyVpc = ec2.Vpc.fromVpcAttributes(dummyStack, 'DummyVpc', {
+      vpcId: 'vpc-12345',
+      availabilityZones: ['us-east-1a'],
+      isolatedSubnetIds: ['subnet-12345'],
+    });
+    const dummySecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(dummyStack, 'DummySG', 'sg-12345');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dummySecurityGroup.addIngressRule = (() => {}) as any;
+    const dummySecret = secretsmanager.Secret.fromSecretNameV2(dummyStack, 'DummySecret', 'db-secret');
 
     stack = new ApiStack(app, 'TestApiStack', {
       rawEventsBucket: dummyBucket,
       processingQueue: dummyQueue,
+      vpc: dummyVpc,
+      databaseSecurityGroup: dummySecurityGroup,
+      databaseSecret: dummySecret,
     });
     
     template = Template.fromStack(stack);
@@ -90,5 +103,37 @@ describe('ApiStack', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const hasEventBridge = allStatements.some((s: any) => s.Action === 'events:PutEvents');
     expect(hasEventBridge).toBe(false);
+  });
+
+  it('creates Processor Lambda with SQS event source mapping, Secrets Manager access, and 5s timeout', () => {
+    // Assert Lambda properties
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      Handler: 'index.handler',
+      Runtime: 'nodejs20.x',
+      Timeout: 5, // 5 seconds
+      MemorySize: 1024,
+      VpcConfig: Match.objectLike({
+        SecurityGroupIds: Match.anyValue(),
+        SubnetIds: Match.anyValue(),
+      })
+    });
+
+    // Assert Event Source Mapping for SQS
+    template.hasResourceProperties('AWS::Lambda::EventSourceMapping', {
+      BatchSize: 10,
+      FunctionResponseTypes: ['ReportBatchItemFailures'],
+    });
+
+    // Assert IAM policy for Secrets Manager
+    template.hasResourceProperties('AWS::IAM::Policy', {
+      PolicyDocument: {
+        Statement: Match.arrayWith([
+          Match.objectLike({
+            Action: Match.arrayWith(['secretsmanager:GetSecretValue', 'secretsmanager:DescribeSecret']),
+            Effect: 'Allow',
+          }),
+        ]),
+      },
+    });
   });
 });

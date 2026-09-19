@@ -81,4 +81,21 @@ describe('DatabaseStack', () => {
       UpdateReplacePolicy: 'Delete',
     });
   });
+
+  it('creates a VPC Interface Endpoint for Secrets Manager', () => {
+    template.hasResourceProperties('AWS::EC2::VPCEndpoint', {
+      ServiceName: {
+        'Fn::Join': [
+          '',
+          [
+            'com.amazonaws.',
+            { Ref: 'AWS::Region' },
+            '.secretsmanager',
+          ],
+        ],
+      },
+      VpcEndpointType: 'Interface',
+      PrivateDnsEnabled: true,
+    });
+  });
 });

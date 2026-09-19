@@ -1,4 +1,4 @@
-import { App, Stack, Duration } from 'aws-cdk-lib';
+import { App, Stack } from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
 import { ProcessingQueues } from '../../lib/constructs/ProcessingQueues';
 
@@ -18,9 +18,9 @@ describe('ProcessingQueues Construct', () => {
     template.hasResourceProperties('AWS::SQS::Queue', {
       RedrivePolicy: {
         deadLetterTargetArn: Match.anyValue(),
-        maxReceiveCount: 3,
+        maxReceiveCount: 5,
       },
-      VisibilityTimeout: 30, // Example timeout, adjust based on impl
+      VisibilityTimeout: 30,
     });
   });
 });

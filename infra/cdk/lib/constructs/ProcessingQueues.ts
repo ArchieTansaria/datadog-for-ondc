@@ -13,10 +13,10 @@ export class ProcessingQueues extends Construct {
     });
 
     this.mainQueue = new sqs.Queue(this, 'MainQueue', {
-      visibilityTimeout: Duration.seconds(30), // Example timeout
+      visibilityTimeout: Duration.seconds(30),
       deadLetterQueue: {
         queue: this.dlq,
-        maxReceiveCount: 3,
+        maxReceiveCount: 5,
       },
     });
   }

@@ -57,5 +57,13 @@ export class AuroraDatabase extends Construct {
       // Hackathon/Development removal policy
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
+
+    // 4. Add VPC Interface Endpoint for Secrets Manager
+    // This allows Lambdas in the isolated subnets to fetch the DB credentials
+    this.vpc.addInterfaceEndpoint('SecretsManagerEndpoint', {
+      service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
+      subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      privateDnsEnabled: true,
+    });
   }
 }
