@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, beforeEach, afterAll } from 'vitest';
+
 import { handler } from '../../src/lambdas/ingest';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -6,27 +6,29 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 
-const { mockS3Send, mockSqsSend } = vi.hoisted(() => ({
-  mockS3Send: vi.fn(),
-  mockSqsSend: vi.fn(),
-}));
+const mockS3Send = jest.fn();
+const mockSqsSend = jest.fn();
 
 // Mock AWS SDK
-vi.mock('@aws-sdk/client-s3', () => ({
-  S3Client: vi.fn(() => ({ send: mockS3Send })),
-  PutObjectCommand: vi.fn((input) => ({ input })),
+jest.mock('@aws-sdk/client-s3', () => ({
+  S3Client: jest.fn(() => ({
+    send: (...args: any[]) => mockS3Send(...args)
+  })),
+  PutObjectCommand: jest.fn((input) => ({ input })),
 }));
 
-vi.mock('@aws-sdk/client-sqs', () => ({
-  SQSClient: vi.fn(() => ({ send: mockSqsSend })),
-  SendMessageCommand: vi.fn((input) => ({ input })),
+jest.mock('@aws-sdk/client-sqs', () => ({
+  SQSClient: jest.fn(() => ({
+    send: (...args: any[]) => mockSqsSend(...args)
+  })),
+  SendMessageCommand: jest.fn((input) => ({ input })),
 }));
 
 describe('Ingest Lambda', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     process.env = { ...originalEnv, RAW_EVENTS_BUCKET: 'test-bucket', PROCESSING_QUEUE_URL: 'test-queue' };
   });
 
