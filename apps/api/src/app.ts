@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import { healthRoutes } from './modules/health/health.routes.js';
 import { orderRoutes } from './modules/orders/orders.routes.js';
+import { eventRoutes } from './modules/events/events.routes.js';
 import { errorHandler } from './common/errors/errorHandler.js';
 
 import { apiKeyAuth } from './common/auth/apiKey.plugin.js';
@@ -19,6 +20,7 @@ export async function buildApp() {
   app.register(async (apiContext) => {
     apiContext.addHook('onRequest', apiContext.authenticate);
     await apiContext.register(orderRoutes, { prefix: '/orders' });
+    await apiContext.register(eventRoutes, { prefix: '/events' });
   }, { prefix: '/api/v1' });
 
   return app;

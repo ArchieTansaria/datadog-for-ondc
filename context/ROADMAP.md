@@ -13,13 +13,16 @@ All AI agents must update this document upon the completion of assigned tasks.
 - [x] **Test Setup (Vitest) & CI prep** (Owner: AI / Human)
 - [ ] **Data Dog initial Research** (Owner: Unassigned) - *Status: Pending*
 
-## Phase 2: Core State Engine & Ingestion (Future)
-*Build the deterministic state machine and robust AWS-backed ingestion pipeline.*
+## Phase 2: Core State Engine & Ingestion (Current Status: In Progress)
+*Build the deterministic state machine and robust local ingestion pipeline, paving the way for AWS.*
 
-- [ ] Define precise deterministic state machine rules.
+- [x] **API Key Authentication Middleware** (Owner: AI)
+- [x] **Clean Architecture (Repositories)** (Owner: AI)
+- [x] **Deterministic State Machine Engine** (Owner: AI)
+- [ ] **Webhook Ingestion Handler (`POST /api/v1/events/webhook`)** (Owner: AI)
+- [x] Establish AWS CDK Foundation (S3, IAM) (Owner: AI)
+- [x] Implement robust DLQs (Dead Letter Queues) via SQS (Owner: AI)
 - [ ] Setup AWS API Gateway and Lambda handlers for ONDC event webhooks.
-- [x] Establish AWS CDK Foundation (S3, IAM).
-- [x] Implement robust DLQs (Dead Letter Queues) via SQS.
 - [ ] Deploy Amazon Aurora Serverless for production PostgreSQL.
 
 ## Phase 3: Observability, Alerts & AI (Future)
