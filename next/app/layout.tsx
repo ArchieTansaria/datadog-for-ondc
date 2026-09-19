@@ -13,6 +13,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth bg-[#09090b] text-[#fafafa] antialiased selection:bg-[#27272a] selection:text-white">
+      <head>
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link crossOrigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect" />
+        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+      </head>
       <body className="min-h-screen flex flex-col font-sans relative overflow-x-hidden">
         {children}
       </body>
