@@ -53,17 +53,24 @@ describe('DatabaseStack', () => {
   });
 
   it('secures port 5432 and does not open it to the internet', () => {
+    // If SecurityGroupIngress is present, it must NOT contain 0.0.0.0/0 on port 5432
     template.hasResourceProperties('AWS::EC2::SecurityGroup', {
       GroupDescription: Match.stringLikeRegexp('.*'),
-      // Security Group Ingress shouldn't have 0.0.0.0/0 for port 5432
-      SecurityGroupIngress: Match.not(Match.arrayWith([
-        Match.objectLike({
-          CidrIp: '0.0.0.0/0',
-          FromPort: 5432,
-          ToPort: 5432,
-        })
-      ]))
+      SecurityGroupIngress: Match.anyValue() // Can be undefined or an array, just checking it exists as a SG
     });
+    
+    // Specifically assert we don't have 0.0.0.0/0 anywhere
+    const sgs = template.findResources('AWS::EC2::SecurityGroup');
+    for (const [id, sg] of Object.entries(sgs)) {
+      const ingress = sg.Properties.SecurityGroupIngress;
+      if (ingress && Array.isArray(ingress)) {
+        for (const rule of ingress) {
+          if (rule.CidrIp === '0.0.0.0/0' && rule.FromPort === 5432) {
+            throw new Error(`Security Group ${id} is open to the internet on port 5432!`);
+          }
+        }
+      }
+    }
   });
 
   it('sets appropriate development removal policy (DESTROY)', () => {
