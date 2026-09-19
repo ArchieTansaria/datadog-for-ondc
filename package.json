@@ -1,0 +1,27 @@
+{
+  "name": "ondc-pulse",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -ws",
+    "build": "npm run build -ws",
+    "test": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "db:up": "docker compose -f docker/docker-compose.yml up -d",
+    "db:down": "docker compose -f docker/docker-compose.yml down",
+    "db:migrate": "npm run db:migrate -w @ondc-pulse/database",
+    "db:seed": "npm run db:seed -w @ondc-pulse/database"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}

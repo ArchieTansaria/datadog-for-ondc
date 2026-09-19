@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  memberships TenantMembership[]
+  participants Participant[]
+  orders      Order[]
+  events      OrderEvent[]
+  incidents   Incident[]
+  slaRules    SLARule[]
+  auditEvents AuditEvent[]
+
+  @@map("tenants")
+}
+
+model User {
+  id         String   @id @default(uuid()) @db.Uuid
+  cognitoSub String?  @unique @map("cognito_sub")
+  email      String   @unique
+  name       String
+  status     String   @default("ACTIVE")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  memberships TenantMembership[]
+  auditEvents AuditEvent[]
+
+  @@map("users")
+}
+
+model TenantMembership {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      String   // OWNER, ADMIN, OPERATIONS, ENGINEER, VIEWER
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([tenantId, userId])
+  @@map("tenant_memberships")
+}
+
+model Participant {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  participantId   String   @map("participant_id")
+  participantType String   @map("participant_type") // SELLER, BUYER, LOGISTICS
+  participantName String?  @map("participant_name")
+  participantUri  String?  @map("participant_uri")
+  environment     String   // PREPROD, PROD
+  domain          String   // e.g. nic2004:60232
+  protocolVersion String   @map("protocol_version")
+  status          String   @default("ACTIVE")
+  metadata        Json?    @db.JsonB
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, participantId, environment, domain])
+  @@map("participants")
+}
+
+model Order {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  ondcOrderId     String?  @map("ondc_order_id")
+  transactionId   String   @map("transaction_id")
+  domain          String
+  environment     String
+  protocolVersion String   @map("protocol_version")
+  currentState    String   @map("current_state") // INTERNAL CANONICAL STATE
+  buyerId         String?  @map("buyer_participant_id")
+  sellerId        String?  @map("seller_participant_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  lastEventAt     DateTime @default(now()) @map("last_event_at")
+  metadata        Json?    @db.JsonB
+
+  tenant Tenant       @relation(fields: [tenantId], references: [id])
+  events OrderEvent[]
+  incidents Incident[]
+
+  @@unique([tenantId, environment, transactionId])
+  @@index([tenantId, ondcOrderId])
+  @@index([tenantId, createdAt])
+  @@map("orders")
+}
+
+model OrderEvent {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @map("tenant_id") @db.Uuid
+  orderId          String   @map("order_id") @db.Uuid
+  eventId          String?  @map("event_id")
+  transactionId    String   @map("transaction_id")
+  action           String   // e.g., on_confirm
+  eventType        String   @map("event_type") // Internal event category
+  eventTimestamp   DateTime @map("event_timestamp")
+  receivedAt       DateTime @default(now()) @map("received_at")
+  participantId    String   @map("participant_id")
+  participantType  String   @map("participant_type")
+  domain           String
+  protocolVersion  String   @map("protocol_version")
+  environment      String
+  correlationId    String?  @map("correlation_id")
+  traceId          String?  @map("trace_id")
+  idempotencyKey   String   @unique @map("idempotency_key")
+  sequenceNumber   Int?     @map("sequence_number")
+  payloadHash      String?  @map("payload_hash")
+  rawPayload       Json     @db.JsonB @map("raw_payload")
+  rawPayloadRef    String?  @map("raw_payload_ref") // S3 URI
+  processingStatus String   @map("processing_status") // PROCESSED, FAILED
+  validationStatus String   @map("validation_status") // VALID, INVALID
+  errorCode        String?  @map("error_code")
+  errorMessage     String?  @map("error_message")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  order  Order  @relation(fields: [orderId], references: [id])
+
+  @@index([tenantId, eventTimestamp])
+  @@index([orderId, eventTimestamp])
+  @@index([correlationId])
+  @@map("order_events")
+}
+
+model Incident {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  orderId        String?   @map("order_id") @db.Uuid
+  incidentType   String    @map("incident_type") // SLA_BREACH, INVALID_TRANSITION
+  severity       String    // INFO, LOW, MEDIUM, HIGH, CRITICAL
+  status         String    @default("OPEN") // OPEN, ACKNOWLEDGED, RESOLVED, IGNORED
+  title          String
+  description    String?
+  detectedAt     DateTime  @default(now()) @map("detected_at")
+  resolvedAt     DateTime? @map("resolved_at")
+  sourceEventId  String?   @map("source_event_id") @db.Uuid
+  metadata       Json?     @db.JsonB
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  order  Order? @relation(fields: [orderId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([orderId])
+  @@map("incidents")
+}
+
+model SLARule {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String
+  fromState   String   @map("from_state")
+  toState     String   @map("to_state")
+  thresholdMs Int      @map("threshold_ms")
+  severity    String
+  enabled     Boolean  @default(true)
+  metadata    Json?    @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, enabled])
+  @@map("sla_rules")
+}
+
+model AuditEvent {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  actorUserId  String?  @map("actor_user_id") @db.Uuid
+  action       String
+  resourceType String   @map("resource_type")
+  resourceId   String   @map("resource_id")
+  metadata     Json?    @db.JsonB
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  actor  User?  @relation(fields: [actorUserId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@map("audit_events")
+}

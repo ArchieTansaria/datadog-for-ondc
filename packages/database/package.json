@@ -1,0 +1,21 @@
+{
+  "name": "@ondc-pulse/database",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/client.js",
+  "types": "dist/client.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.10.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.0.0"
+  }
+}
