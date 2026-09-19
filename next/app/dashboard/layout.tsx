@@ -7,18 +7,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="bg-[#08080a] text-zinc-300 antialiased selection:bg-white selection:text-black min-h-screen">
       <header className="fixed top-0 left-0 right-0 h-12 bg-[#08080a]/90 backdrop-blur-md z-50 flex items-center justify-between px-5 border-b border-white/[0.07]">
 <div className="flex items-center gap-5">
-<a className="flex items-center gap-2 text-white" href="#">
-{/*  Stark minimal glyph  */}
-<svg className="text-white" fill="currentColor" height="15" viewBox="0 0 24 24" width="15">
-<path d="M12 2L2 22h20L12 2zm0 4.8L18.4 19H5.6L12 6.8z" />
+<a className="flex items-center gap-2 text-white group cursor-pointer" href="/dashboard">
+<svg className="w-4 h-4 text-white transition-transform duration-300 group-hover:scale-105" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" viewBox="0 0 24 24">
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
 </svg>
-<span className="font-medium text-[13px] tracking-tight text-white uppercase">Pulse</span>
+<span className="text-sm font-semibold tracking-tight text-white font-mono">Pulse</span>
 </a>
 <span className="text-white/[0.15]">/</span>
 <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-400">
 <span>ONDC Core v1.2</span>
 <span className="text-zinc-600">·</span>
-<span className="text-zinc-500">ap-south-1</span>
+<span className="text-zinc-500">{process.env.NEXT_PUBLIC_AWS_REGION || 'us-east-1'}</span>
 </div>
 </div>
 {/*  Center Search Palette Trigger  */}
