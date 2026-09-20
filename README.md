@@ -8,11 +8,11 @@ It traces individual orders, ingests raw ONDC protocol webhooks, normalizes them
 
 ---
 
-## 🏗 Architecture & Data Flow
+## Architecture & Data Flow
 
 To handle the unpredictable and spiky nature of ONDC webhook traffic without dropping callbacks (which results in lost order states), ONDC Pulse uses a fully decoupled, event-driven serverless architecture on AWS.
 
-![ONDC Pulse Architecture](./architecture.png)
+![ONDC Pulse Architecture](./nexusarch.jpeg)
 
 ### The Flow:
 1. **API Gateway & Ingestion Lambda:** Receives ONDC webhooks (e.g., `/search`, `/on_confirm`). It immediately validates the schema, pushes the raw JSON payload to S3 (for audit and compliance), and forwards a normalized event to EventBridge. This ensures a fast `200 OK` response to the caller.
@@ -24,7 +24,7 @@ To handle the unpredictable and spiky nature of ONDC webhook traffic without dro
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 ### Core Technologies
 - **Next.js (React):** Frontend dashboard for real-time order tracking and incident management.
@@ -41,7 +41,7 @@ To handle the unpredictable and spiky nature of ONDC webhook traffic without dro
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
