@@ -1,0 +1,1293 @@
+CREATE-APP()                                                      CREATE-APP()
+
+NNAAMMEE
+       create-app -
+
+DDEESSCCRRIIPPTTIIOONN
+       Creates a new Amplify app.
+
+       See also: AWS API Documentation
+
+SSYYNNOOPPSSIISS
+
+            create-app
+          --name <value>
+          [--description <value>]
+          [--repository <value>]
+          [--platform <value>]
+          [--compute-role-arn <value>]
+          [--iam-service-role-arn <value>]
+          [--oauth-token <value>]
+          [--access-token <value>]
+          [--environment-variables <value>]
+          [--enable-branch-auto-build | --no-enable-branch-auto-build]
+          [--enable-branch-auto-deletion | --no-enable-branch-auto-deletion]
+          [--enable-basic-auth | --no-enable-basic-auth]
+          [--basic-auth-credentials <value>]
+          [--custom-rules <value>]
+          [--tags <value>]
+          [--build-spec <value>]
+          [--custom-headers <value>]
+          [--enable-auto-branch-creation | --no-enable-auto-branch-creation]
+          [--auto-branch-creation-patterns <value>]
+          [--auto-branch-creation-config <value>]
+          [--job-config <value>]
+          [--cache-config <value>]
+          [--cli-input-json | --cli-input-yaml]
+          [--generate-cli-skeleton <value>]
+          [--debug]
+          [--endpoint-url <value>]
+          [--no-verify-ssl]
+          [--no-paginate]
+          [--output <value>]
+          [--query <value>]
+          [--profile <value>]
+          [--region <value>]
+          [--version <value>]
+          [--color <value>]
+          [--no-sign-request]
+          [--ca-bundle <value>]
+          [--cli-read-timeout <value>]
+          [--cli-connect-timeout <value>]
+          [--cli-binary-format <value>]
+          [--no-cli-pager]
+          [--cli-auto-prompt]
+          [--no-cli-auto-prompt]
+          [--cli-error-format <value>]
+
+OOPPTTIIOONNSS
+       ----nnaammee (string) [required]
+          The name of the Amplify app.
+
+          Constraints:
+
+          +o min: 11
+
+          +o max: 225555
+
+          +o pattern: ((??ss))..++
+
+       ----ddeessccrriippttiioonn (string)
+          The description of the Amplify app.
+
+          Constraints:
+
+          +o max: 11000000
+
+          +o pattern: ((??ss))..**
+
+       ----rreeppoossiittoorryy (string)
+          The Git repository for the Amplify app.
+
+          Constraints:
+
+          +o max: 11000000
+
+          +o pattern: ((??ss))..**
+
+       ----ppllaattffoorrmm (string)
+          The platform for the Amplify app. For a static app, set the platform
+          type to WWEEBB . For a dynamic server-side rendered (SSR) app, set the
+          platform type to WWEEBB__CCOOMMPPUUTTEE . For an app requiring Amplify
+          Hosting's original SSR support only, set the platform type to
+          WWEEBB__DDYYNNAAMMIICC .
+
+          If you are deploying an SSG only app with Next.js version 14 or
+          later, you must set the platform type to WWEEBB__CCOOMMPPUUTTEE and set the
+          artifacts bbaasseeDDiirreeccttoorryy to ..nneexxtt in the application's build
+          settings. For an example of the build specification settings, see
+          _A_m_p_l_i_f_y _b_u_i_l_d _s_e_t_t_i_n_g_s _f_o_r _a _N_e_x_t_._j_s _1_4 _S_S_G _a_p_p_l_i_c_a_t_i_o_n in the
+          _A_m_p_l_i_f_y _H_o_s_t_i_n_g _U_s_e_r _G_u_i_d_e .
+
+          Possible values:
+
+          +o WWEEBB
+
+          +o WWEEBB__DDYYNNAAMMIICC
+
+          +o WWEEBB__CCOOMMPPUUTTEE
+
+       ----ccoommppuuttee--rroollee--aarrnn (string)
+          The Amazon Resource Name (ARN) of the IAM role to assign to an SSR
+          app. The SSR Compute role allows the Amplify Hosting compute service
+          to securely access specific Amazon Web Services resources based on
+          the role's permissions. For more information about the SSR Compute
+          role, see _A_d_d_i_n_g _a_n _S_S_R _C_o_m_p_u_t_e _r_o_l_e in the _A_m_p_l_i_f_y _U_s_e_r _G_u_i_d_e .
+
+          Constraints:
+
+          +o min: 00
+
+          +o max: 11000000
+
+          +o pattern: ((??ss))..**
+
+       ----iiaamm--sseerrvviiccee--rroollee--aarrnn (string)
+          The Amazon Resource Name (ARN) of the IAM service role for the
+          Amplify app.
+
+          Constraints:
+
+          +o min: 00
+
+          +o max: 11000000
+
+          +o pattern: ((??ss))..**
+
+       ----ooaauutthh--ttookkeenn (string)
+          The OAuth token for a third-party source control system for an
+          Amplify app. The OAuth token is used to create a webhook and a
+          read-only deploy key using SSH cloning. The OAuth token is not
+          stored.
+
+          Use ooaauutthhTTookkeenn for repository providers other than GitHub, such as
+          Bitbucket or CodeCommit. To authorize access to GitHub as your
+          repository provider, use aacccceessssTTookkeenn .
+
+          You must specify either ooaauutthhTTookkeenn or aacccceessssTTookkeenn when you create a
+          new app.
+
+          Existing Amplify apps deployed from a GitHub repository using OAuth
+          continue to work with CI/CD. However, we strongly recommend that you
+          migrate these apps to use the GitHub App. For more information, see
+          _M_i_g_r_a_t_i_n_g _a_n _e_x_i_s_t_i_n_g _O_A_u_t_h _a_p_p _t_o _t_h_e _A_m_p_l_i_f_y _G_i_t_H_u_b _A_p_p in the
+          _A_m_p_l_i_f_y _U_s_e_r _G_u_i_d_e .
+
+          Constraints:
+
+          +o max: 11000000
+
+          +o pattern: ((??ss))..**
+
+       ----aacccceessss--ttookkeenn (string)
+          The personal access token for a GitHub repository for an Amplify
+          app. The personal access token is used to authorize access to a
+          GitHub repository using the Amplify GitHub App. The token is not
+          stored.
+
+          Use aacccceessssTTookkeenn for GitHub repositories only. To authorize access to
+          a repository provider such as Bitbucket or CodeCommit, use
+          ooaauutthhTTookkeenn .
+
+          You must specify either aacccceessssTTookkeenn or ooaauutthhTTookkeenn when you create a
+          new app.
+
+          Existing Amplify apps deployed from a GitHub repository using OAuth
+          continue to work with CI/CD. However, we strongly recommend that you
+          migrate these apps to use the GitHub App. For more information, see
+          _M_i_g_r_a_t_i_n_g _a_n _e_x_i_s_t_i_n_g _O_A_u_t_h _a_p_p _t_o _t_h_e _A_m_p_l_i_f_y _G_i_t_H_u_b _A_p_p in the
+          _A_m_p_l_i_f_y _U_s_e_r _G_u_i_d_e .
+
+          Constraints:
+
+          +o min: 11
+
+          +o max: 225555
+
+          +o pattern: ((??ss))..++
+
+       ----eennvviirroonnmmeenntt--vvaarriiaabblleess (map)
+          The environment variables map for an Amplify app.
+
+          For a list of the environment variables that are accessible to
+          Amplify by default, see _A_m_p_l_i_f_y _E_n_v_i_r_o_n_m_e_n_t _v_a_r_i_a_b_l_e_s in the _A_m_p_l_i_f_y
+          _H_o_s_t_i_n_g _U_s_e_r _G_u_i_d_e .
+
+          key -> (string)
+             Constraints:
+
+             +o max: 225555
+
+             +o pattern: ((??ss))..**
+
+          value -> (string)
+             Constraints:
+
+             +o max: 55550000
+
+             +o pattern: ((??ss))..**
+
+       Shorthand Syntax:
+
+          KeyName1=string,KeyName2=string
+
+       JSON Syntax:
+
+          {"string": "string"
+            ...}
+
+       ----eennaabbllee--bbrraanncchh--aauuttoo--bbuuiilldd | ----nnoo--eennaabbllee--bbrraanncchh--aauuttoo--bbuuiilldd (boolean)
+          Enables the auto building of branches for an Amplify app.
+
+       ----eennaabbllee--bbrraanncchh--aauuttoo--ddeelleettiioonn | ----nnoo--eennaabbllee--bbrraanncchh--aauuttoo--ddeelleettiioonn
+       (boolean)
+          Automatically disconnects a branch in the Amplify console when you
+          delete a branch from your Git repository.
+
+       ----eennaabbllee--bbaassiicc--aauutthh | ----nnoo--eennaabbllee--bbaassiicc--aauutthh (boolean)
+          Enables basic authorization for an Amplify app. This will apply to
+          all branches that are part of this app.
+
+       ----bbaassiicc--aauutthh--ccrreeddeennttiiaallss (string)
+          The credentials for basic authorization for an Amplify app. You must
+          base64-encode the authorization credentials and provide them in the
+          format uusseerr::ppaasssswwoorrdd .
+
+          Constraints:
+
+          +o max: 22000000
+
+          +o pattern: ((??ss))..**
+
+       ----ccuussttoomm--rruulleess (list)
+          The custom rewrite and redirect rules for an Amplify app.
+
+          (structure)
+             Describes a custom rewrite or redirect rule.
+
+             source -> (string) [required]
+                The source pattern for a URL rewrite or redirect rule.
+
+                Constraints:
+
+                +o min: 11
+
+                +o max: 22004488
+
+                +o pattern: ((??ss))..++
+
+              target -> (string) [required]
+                The target pattern for a URL rewrite or redirect rule.
+
+                Constraints:
+
+                +o min: 11
+
+                +o max: 22004488
+
+                +o pattern: ((??ss))..++
+
+              status -> (string)
+                The status code for a URL rewrite or redirect rule.
+                   200
+
+                 Represents a 200 rewrite rule.
+                   301
+
+                 Represents a 301 (moved permanently) redirect rule. This and
+                 all future requests should be directed to the target URL.
+                   302
+
+                 Represents a 302 temporary redirect rule.
+                   404
+
+                 Represents a 404 redirect rule.
+                   404-200
+
+                 Represents a 404 rewrite rule.
+
+                 Constraints:
+
+                +o min: 33
+
+                +o max: 77
+
+                +o pattern: ..{{33,,77}}
+
+              condition -> (string)
+                The condition for a URL rewrite or redirect rule, such as a
+                country code.
+
+                Constraints:
+
+                +o min: 00
+
+                +o max: 22004488
+
+                +o pattern: ((??ss))..**
+
+       Shorthand Syntax:
+
+          source=string,target=string,status=string,condition=string ...
+
+       JSON Syntax:
+
+          [
+            {
+              "source": "string",
+              "target": "string",
+              "status": "string",
+              "condition": "string"
+            }
+            ...
+          ]
+
+       ----ttaaggss (map)
+          The tag for an Amplify app.
+
+          Constraints:
+
+          +o min: 00
+
+          +o max: 5500
+
+          key -> (string)
+             Constraints:
+
+             +o min: 11
+
+             +o max: 112288
+
+             +o pattern: ^^((??!!aawwss::))[[aa--zzAA--ZZ++--==..__:://]]++$$
+
+          value -> (string)
+             Constraints:
+
+             +o max: 225566
+
+             +o pattern: ^^(([[\\pp{{LL}}\\pp{{ZZ}}\\pp{{NN}}__..:://==++\\--@@]]**))$$
+
+       Shorthand Syntax:
+
+          KeyName1=string,KeyName2=string
+
+       JSON Syntax:
+
+          {"string": "string"
+            ...}
+
+       ----bbuuiilldd--ssppeecc (string)
+          The build specification (build spec) for an Amplify app.
+
+          Constraints:
+
+          +o min: 11
+
+          +o max: 2255000000
+
+          +o pattern: ((??ss))..++
+
+       ----ccuussttoomm--hheeaaddeerrss (string)
+          The custom HTTP headers for an Amplify app.
+
+          Constraints:
+
+          +o min: 00
+
+          +o max: 2255000000
+
+          +o pattern: ((??ss))..**
+
+       ----eennaabbllee--aauuttoo--bbrraanncchh--ccrreeaattiioonn | ----nnoo--eennaabbllee--aauuttoo--bbrraanncchh--ccrreeaattiioonn
+       (boolean)
+          Enables automated branch creation for an Amplify app.
+
+       ----aauuttoo--bbrraanncchh--ccrreeaattiioonn--ppaatttteerrnnss (list)
+          The automated branch creation glob patterns for an Amplify app.
+
+          (string)
+             Constraints:
+
+             +o min: 11
+
+             +o max: 22004488
+
+             +o pattern: ((??ss))..++
+
+       Syntax:
+
+          "string" "string" ...
+
+       ----aauuttoo--bbrraanncchh--ccrreeaattiioonn--ccoonnffiigg (structure)
+          The automated branch creation configuration for an Amplify app.
+
+          stage -> (string)
+             Describes the current stage for the autocreated branch.
+
+             Possible values:
+
+             +o PPRROODDUUCCTTIIOONN
+
+             +o BBEETTAA
+
+             +o DDEEVVEELLOOPPMMEENNTT
+
+             +o EEXXPPEERRIIMMEENNTTAALL
+
+             +o PPUULLLL__RREEQQUUEESSTT
+
+          framework -> (string)
+             The framework for the autocreated branch.
+
+             Constraints:
+
+             +o max: 225555
+
+             +o pattern: ((??ss))..**
+
+          enableAutoBuild -> (boolean)
+             Enables auto building for the autocreated branch.
+
+          environmentVariables -> (map)
+             The environment variables for the autocreated branch.
+
+             key -> (string)
+                Constraints:
+
+                +o max: 225555
+
+                +o pattern: ((??ss))..**
+
+              value -> (string)
+                Constraints:
+
+                +o max: 55550000
+
+                +o pattern: ((??ss))..**
+
+          basicAuthCredentials -> (string)
+             The basic authorization credentials for the autocreated branch.
+             You must base64-encode the authorization credentials and provide
+             them in the format uusseerr::ppaasssswwoorrdd .
+
+             Constraints:
+
+             +o max: 22000000
+
+             +o pattern: ((??ss))..**
+
+          enableBasicAuth -> (boolean)
+             Enables basic authorization for the autocreated branch.
+
+          enablePerformanceMode -> (boolean)
+             Enables performance mode for the branch.
+
+             Performance mode optimizes for faster hosting performance by
+             keeping content cached at the edge for a longer interval. When
+             performance mode is enabled, hosting configuration or code
+             changes can take up to 10 minutes to roll out.
+
+          buildSpec -> (string)
+             The build specification (build spec) for the autocreated branch.
+
+             Constraints:
+
+             +o min: 11
+
+             +o max: 2255000000
+
+             +o pattern: ((??ss))..++
+
+          enablePullRequestPreview -> (boolean)
+             Enables pull request previews for the autocreated branch.
+
+          pullRequestEnvironmentName -> (string)
+             The Amplify environment name for the pull request.
+
+             Constraints:
+
+             +o max: 2200
+
+             +o pattern: ((??ss))..**
+
+       Shorthand Syntax:
+
+          stage=string,framework=string,enableAutoBuild=boolean,environmentVariables={KeyName1=string,KeyName2=string},basicAuthCredentials=string,enableBasicAuth=boolean,enablePerformanceMode=boolean,buildSpec=string,enablePullRequestPreview=boolean,pullRequestEnvironmentName=string
+
+       JSON Syntax:
+
+          {
+            "stage": "PRODUCTION"|"BETA"|"DEVELOPMENT"|"EXPERIMENTAL"|"PULL_REQUEST",
+            "framework": "string",
+            "enableAutoBuild": true|false,
+            "environmentVariables": {"string": "string"
+              ...},
+            "basicAuthCredentials": "string",
+            "enableBasicAuth": true|false,
+            "enablePerformanceMode": true|false,
+            "buildSpec": "string",
+            "enablePullRequestPreview": true|false,
+            "pullRequestEnvironmentName": "string"
+          }
+
+       ----jjoobb--ccoonnffiigg (structure)
+          Describes the configuration details that apply to the jobs for an
+          Amplify app.
+
+          buildComputeType -> (string) [required]
+             Specifies the size of the build instance. Amplify supports three
+             instance sizes: SSTTAANNDDAARRDD__88GGBB , LLAARRGGEE__1166GGBB , and XXLLAARRGGEE__7722GGBB . If
+             you don't specify a value, Amplify uses the SSTTAANNDDAARRDD__88GGBB default.
+
+             The following list describes the CPU, memory, and storage
+             capacity for each build instance type:
+                STANDARD_8GB
+
+             +o vCPUs: 4
+
+             +o Memory: 8 GiB
+
+             +o Disk space: 128 GB
+
+               LARGE_16GB
+
+             +o vCPUs: 8
+
+             +o Memory: 16 GiB
+
+             +o Disk space: 128 GB
+
+               XLARGE_72GB
+
+             +o vCPUs: 36
+
+             +o Memory: 72 GiB
+
+             +o Disk space: 256 GB
+
+              Possible values:
+
+             +o SSTTAANNDDAARRDD__88GGBB
+
+             +o LLAARRGGEE__1166GGBB
+
+             +o XXLLAARRGGEE__7722GGBB
+
+       Shorthand Syntax:
+
+          buildComputeType=string
+
+       JSON Syntax:
+
+          {
+            "buildComputeType": "STANDARD_8GB"|"LARGE_16GB"|"XLARGE_72GB"
+          }
+
+       ----ccaacchhee--ccoonnffiigg (structure)
+          The cache configuration for the Amplify app.
+
+          type -> (string) [required]
+             The type of cache configuration to use for an Amplify app.
+
+             The AAMMPPLLIIFFYY__MMAANNAAGGEEDD cache configuration automatically applies an
+             optimized cache configuration for your app based on its platform,
+             routing rules, and rewrite rules.
+
+             The AAMMPPLLIIFFYY__MMAANNAAGGEEDD__NNOO__CCOOOOKKIIEESS cache configuration type is the
+             same as AAMMPPLLIIFFYY__MMAANNAAGGEEDD , except that it excludes all cookies
+             from the cache key. This is the default setting.
+
+             Possible values:
+
+             +o AAMMPPLLIIFFYY__MMAANNAAGGEEDD
+
+             +o AAMMPPLLIIFFYY__MMAANNAAGGEEDD__NNOO__CCOOOOKKIIEESS
+
+       Shorthand Syntax:
+
+          type=string
+
+       JSON Syntax:
+
+          {
+            "type": "AMPLIFY_MANAGED"|"AMPLIFY_MANAGED_NO_COOKIES"
+          }
+
+       ----ccllii--iinnppuutt--jjssoonn | ----ccllii--iinnppuutt--yyaammll (string) Reads arguments from the
+       JSON string provided. The JSON string follows the format provided by
+       ----ggeenneerraattee--ccllii--sskkeelleettoonn. If other arguments are provided on the command
+       line, those values will override the JSON-provided values. It is not
+       possible to pass arbitrary binary values using a JSON-provided value as
+       the string will be taken literally. This may not be specified along
+       with ----ccllii--iinnppuutt--yyaammll.
+
+       ----ggeenneerraattee--ccllii--sskkeelleettoonn (string) Prints a JSON skeleton to standard
+       output without sending an API request. If provided with no value or the
+       value iinnppuutt, prints a sample input JSON that can be used as an argument
+       for ----ccllii--iinnppuutt--jjssoonn. Similarly, if provided yyaammll--iinnppuutt it will print a
+       sample input YAML that can be used with ----ccllii--iinnppuutt--yyaammll. If provided
+       with the value oouuttppuutt, it validates the command inputs and returns a
+       sample output JSON for that command. The generated JSON skeleton is not
+       stable between versions of the AWS CLI and there are no backwards
+       compatibility guarantees in the JSON skeleton generated.
+
+GGLLOOBBAALL OOPPTTIIOONNSS
+       ----ddeebbuugg (boolean)
+
+       Turn on debug logging.
+
+       ----eennddppooiinntt--uurrll (string)
+
+       Override command's default URL with the given URL.
+
+       ----nnoo--vveerriiffyy--ssssll (boolean)
+
+       By default, the AWS CLI uses SSL when communicating with AWS services.
+       For each SSL connection, the AWS CLI will verify SSL certificates. This
+       option overrides the default behavior of verifying SSL certificates.
+
+       ----nnoo--ppaaggiinnaattee (boolean)
+
+       Disable automatic pagination. If automatic pagination is disabled, the
+       AWS CLI will only make one call, for the first page of results.
+
+       ----oouuttppuutt (string)
+
+       The formatting style for command output.
+
+       +o json
+
+       +o text
+
+       +o table
+
+       +o yaml
+
+       +o yaml-stream
+
+       +o off
+
+       ----qquueerryy (string)
+
+       A JMESPath query to use in filtering the response data.
+
+       ----pprrooffiillee (string)
+
+       Use a specific profile from your credential file.
+
+       ----rreeggiioonn (string)
+
+       The region to use. Overrides config/env settings.
+
+       ----vveerrssiioonn (string)
+
+       Display the version of this tool.
+
+       ----ccoolloorr (string)
+
+       Turn on/off color output.
+
+       +o on
+
+       +o off
+
+       +o auto
+
+       ----nnoo--ssiiggnn--rreeqquueesstt (boolean)
+
+       Do not sign requests. Credentials will not be loaded if this argument
+       is provided.
+
+       ----ccaa--bbuunnddllee (string)
+
+       The CA certificate bundle to use when verifying SSL certificates.
+       Overrides config/env settings.
+
+       ----ccllii--rreeaadd--ttiimmeeoouutt (int)
+
+       The maximum socket read time in seconds. If the value is set to 0, the
+       socket read will be blocking and not timeout. The default value is 60
+       seconds.
+
+       ----ccllii--ccoonnnneecctt--ttiimmeeoouutt (int)
+
+       The maximum socket connect time in seconds. If the value is set to 0,
+       the socket connect will be blocking and not timeout. The default value
+       is 60 seconds.
+
+       ----ccllii--bbiinnaarryy--ffoorrmmaatt (string)
+
+       The formatting style to be used for binary blobs. The default format is
+       base64. The base64 format expects binary blobs to be provided as a
+       base64 encoded string. The raw-in-base64-out format preserves
+       compatibility with AWS CLI V1 behavior and binary values must be passed
+       literally. When providing contents from a file that map to a binary
+       blob ffiilleebb:://// will always be treated as binary and use the file
+       contents directly regardless of the ccllii--bbiinnaarryy--ffoorrmmaatt setting. When
+       using ffiillee:://// the file contents will need to properly formatted for the
+       configured ccllii--bbiinnaarryy--ffoorrmmaatt.
+
+       +o base64
+
+       +o raw-in-base64-out
+
+       ----nnoo--ccllii--ppaaggeerr (boolean)
+
+       Disable cli pager for output.
+
+       ----ccllii--aauuttoo--pprroommpptt (boolean)
+
+       Automatically prompt for CLI input parameters.
+
+       ----nnoo--ccllii--aauuttoo--pprroommpptt (boolean)
+
+       Disable automatically prompt for CLI input parameters.
+
+       ----ccllii--eerrrroorr--ffoorrmmaatt (string)
+
+       The formatting style for error output. By default, errors are displayed
+       in enhanced format.
+
+       +o legacy
+
+       +o json
+
+       +o yaml
+
+       +o text
+
+       +o table
+
+       +o enhanced
+
+OOUUTTPPUUTT
+       app -> (structure)
+          Represents the different branches of a repository for building,
+          deploying, and hosting an Amplify app.
+
+          appId -> (string) [required]
+             The unique ID of the Amplify app.
+
+             Constraints:
+
+             +o min: 11
+
+             +o max: 2200
+
+             +o pattern: dd[[aa--zz00--99]]++
+
+          appArn -> (string) [required]
+             The Amazon Resource Name (ARN) of the Amplify app.
+
+             Constraints:
+
+             +o max: 11000000
+
+          name -> (string) [required]
+             The name for the Amplify app.
+
+             Constraints:
+
+             +o min: 11
+
+             +o max: 225555
+
+             +o pattern: ((??ss))..++
+
+          tags -> (map)
+             The tag for the Amplify app.
+
+             Constraints:
+
+             +o min: 00
+
+             +o max: 5500
+
+              key -> (string)
+                Constraints:
+
+                +o min: 11
+
+                +o max: 112288
+
+                +o pattern: ^^((??!!aawwss::))[[aa--zzAA--ZZ++--==..__:://]]++$$
+
+              value -> (string)
+                Constraints:
+
+                +o max: 225566
+
+                +o pattern: ^^(([[\\pp{{LL}}\\pp{{ZZ}}\\pp{{NN}}__..:://==++\\--@@]]**))$$
+
+          description -> (string) [required]
+             The description for the Amplify app.
+
+             Constraints:
+
+             +o max: 11000000
+
+             +o pattern: ((??ss))..**
+
+          repository -> (string) [required]
+             The Git repository for the Amplify app.
+
+             Constraints:
+
+             +o max: 11000000
+
+             +o pattern: ((??ss))..**
+
+          platform -> (string) [required]
+             The platform for the Amplify app. For a static app, set the
+             platform type to WWEEBB . For a dynamic server-side rendered (SSR)
+             app, set the platform type to WWEEBB__CCOOMMPPUUTTEE . For an app requiring
+             Amplify Hosting's original SSR support only, set the platform
+             type to WWEEBB__DDYYNNAAMMIICC .
+
+             If you are deploying an SSG only app with Next.js 14 or later,
+             you must use the platform type WWEEBB__CCOOMMPPUUTTEE .
+
+             Possible values:
+
+             +o WWEEBB
+
+             +o WWEEBB__DDYYNNAAMMIICC
+
+             +o WWEEBB__CCOOMMPPUUTTEE
+
+          createTime -> (timestamp) [required]
+             A timestamp of when Amplify created the application.
+
+          updateTime -> (timestamp) [required]
+             A timestamp of when Amplify updated the application.
+
+          computeRoleArn -> (string)
+             The Amazon Resource Name (ARN) of the IAM role for an SSR app.
+             The Compute role allows the Amplify Hosting compute service to
+             securely access specific Amazon Web Services resources based on
+             the role's permissions. For more information about the SSR
+             Compute role, see _A_d_d_i_n_g _a_n _S_S_R _C_o_m_p_u_t_e _r_o_l_e in the _A_m_p_l_i_f_y _U_s_e_r
+             _G_u_i_d_e .
+
+             Constraints:
+
+             +o min: 00
+
+             +o max: 11000000
+
+             +o pattern: ((??ss))..**
+
+          iamServiceRoleArn -> (string)
+             The Amazon Resource Name (ARN) of the IAM service role for the
+             Amplify app.
+
+             Constraints:
+
+             +o min: 00
+
+             +o max: 11000000
+
+             +o pattern: ((??ss))..**
+
+          environmentVariables -> (map) [required]
+             The environment variables for the Amplify app.
+
+             For a list of the environment variables that are accessible to
+             Amplify by default, see _A_m_p_l_i_f_y _E_n_v_i_r_o_n_m_e_n_t _v_a_r_i_a_b_l_e_s in the
+             _A_m_p_l_i_f_y _H_o_s_t_i_n_g _U_s_e_r _G_u_i_d_e .
+
+             key -> (string)
+                Constraints:
+
+                +o max: 225555
+
+                +o pattern: ((??ss))..**
+
+              value -> (string)
+                Constraints:
+
+                +o max: 55550000
+
+                +o pattern: ((??ss))..**
+
+          defaultDomain -> (string) [required]
+             The default domain for the Amplify app.
+
+             Constraints:
+
+             +o min: 11
+
+             +o max: 11000000
+
+          enableBranchAutoBuild -> (boolean) [required]
+             Enables the auto-building of branches for the Amplify app.
+
+          enableBranchAutoDeletion -> (boolean)
+             Automatically disconnect a branch in the Amplify console when you
+             delete a branch from your Git repository.
+
+          enableBasicAuth -> (boolean) [required]
+             Enables basic authorization for the Amplify app's branches.
+
+          basicAuthCredentials -> (string)
+             The basic authorization credentials for branches for the Amplify
+             app. You must base64-encode the authorization credentials and
+             provide them in the format uusseerr::ppaasssswwoorrdd .
+
+             Constraints:
+
+             +o max: 22000000
+
+             +o pattern: ((??ss))..**
+
+          customRules -> (list)
+             Describes the custom redirect and rewrite rules for the Amplify
+             app.
+
+             (structure)
+                Describes a custom rewrite or redirect rule.
+
+                source -> (string) [required]
+                   The source pattern for a URL rewrite or redirect rule.
+
+                   Constraints:
+
+                   +o min: 11
+
+                   +o max: 22004488
+
+                   +o pattern: ((??ss))..++
+
+                 target -> (string) [required]
+                   The target pattern for a URL rewrite or redirect rule.
+
+                   Constraints:
+
+                   +o min: 11
+
+                   +o max: 22004488
+
+                   +o pattern: ((??ss))..++
+
+                 status -> (string)
+                   The status code for a URL rewrite or redirect rule.
+                      200
+
+                     Represents a 200 rewrite rule.
+                      301
+
+                     Represents a 301 (moved permanently) redirect rule. This
+                     and all future requests should be directed to the target
+                     URL.
+                      302
+
+                     Represents a 302 temporary redirect rule.
+                      404
+
+                     Represents a 404 redirect rule.
+                      404-200
+
+                     Represents a 404 rewrite rule.
+
+                     Constraints:
+
+                   +o min: 33
+
+                   +o max: 77
+
+                   +o pattern: ..{{33,,77}}
+
+                 condition -> (string)
+                   The condition for a URL rewrite or redirect rule, such as a
+                   country code.
+
+                   Constraints:
+
+                   +o min: 00
+
+                   +o max: 22004488
+
+                   +o pattern: ((??ss))..**
+
+          productionBranch -> (structure)
+             Describes the information about a production branch of the
+             Amplify app.
+
+             lastDeployTime -> (timestamp)
+                The last deploy time of the production branch.
+
+              status -> (string)
+                The status of the production branch.
+
+                Constraints:
+
+                +o min: 33
+
+                +o max: 77
+
+                +o pattern: ..{{33,,77}}
+
+              thumbnailUrl -> (string)
+                The thumbnail URL for the production branch.
+
+                Constraints:
+
+                +o min: 11
+
+                +o max: 22000000
+
+              branchName -> (string)
+                The branch name for the production branch.
+
+                Constraints:
+
+                +o min: 11
+
+                +o max: 225555
+
+                +o pattern: ((??ss))..++
+
+          buildSpec -> (string)
+             Describes the content of the build specification (build spec) for
+             the Amplify app.
+
+             Constraints:
+
+             +o min: 11
+
+             +o max: 2255000000
+
+             +o pattern: ((??ss))..++
+
+          customHeaders -> (string)
+             Describes the custom HTTP headers for the Amplify app.
+
+             Constraints:
+
+             +o min: 00
+
+             +o max: 2255000000
+
+             +o pattern: ((??ss))..**
+
+          enableAutoBranchCreation -> (boolean)
+             Enables automated branch creation for the Amplify app.
+
+          autoBranchCreationPatterns -> (list)
+             Describes the automated branch creation glob patterns for the
+             Amplify app.
+
+             (string)
+                Constraints:
+
+                +o min: 11
+
+                +o max: 22004488
+
+                +o pattern: ((??ss))..++
+
+          autoBranchCreationConfig -> (structure)
+             Describes the automated branch creation configuration for the
+             Amplify app.
+
+             stage -> (string)
+                Describes the current stage for the autocreated branch.
+
+                Possible values:
+
+                +o PPRROODDUUCCTTIIOONN
+
+                +o BBEETTAA
+
+                +o DDEEVVEELLOOPPMMEENNTT
+
+                +o EEXXPPEERRIIMMEENNTTAALL
+
+                +o PPUULLLL__RREEQQUUEESSTT
+
+              framework -> (string)
+                The framework for the autocreated branch.
+
+                Constraints:
+
+                +o max: 225555
+
+                +o pattern: ((??ss))..**
+
+              enableAutoBuild -> (boolean)
+                Enables auto building for the autocreated branch.
+
+              environmentVariables -> (map)
+                The environment variables for the autocreated branch.
+
+                key -> (string)
+                   Constraints:
+
+                   +o max: 225555
+
+                   +o pattern: ((??ss))..**
+
+                 value -> (string)
+                   Constraints:
+
+                   +o max: 55550000
+
+                   +o pattern: ((??ss))..**
+
+              basicAuthCredentials -> (string)
+                The basic authorization credentials for the autocreated
+                branch. You must base64-encode the authorization credentials
+                and provide them in the format uusseerr::ppaasssswwoorrdd .
+
+                Constraints:
+
+                +o max: 22000000
+
+                +o pattern: ((??ss))..**
+
+              enableBasicAuth -> (boolean)
+                Enables basic authorization for the autocreated branch.
+
+              enablePerformanceMode -> (boolean)
+                Enables performance mode for the branch.
+
+                Performance mode optimizes for faster hosting performance by
+                keeping content cached at the edge for a longer interval. When
+                performance mode is enabled, hosting configuration or code
+                changes can take up to 10 minutes to roll out.
+
+              buildSpec -> (string)
+                The build specification (build spec) for the autocreated
+                branch.
+
+                Constraints:
+
+                +o min: 11
+
+                +o max: 2255000000
+
+                +o pattern: ((??ss))..++
+
+              enablePullRequestPreview -> (boolean)
+                Enables pull request previews for the autocreated branch.
+
+              pullRequestEnvironmentName -> (string)
+                The Amplify environment name for the pull request.
+
+                Constraints:
+
+                +o max: 2200
+
+                +o pattern: ((??ss))..**
+
+          repositoryCloneMethod -> (string)
+
+             NNOOTTEE::
+                This is for internal use.
+
+              The Amplify service uses this parameter to specify the
+              authentication protocol to use to access the Git repository for
+              an Amplify app. Amplify specifies TTOOKKEENN for a GitHub repository,
+              SSIIGGVV44 for an Amazon Web Services CodeCommit repository, and SSSSHH
+              for GitLab and Bitbucket repositories.
+
+              Possible values:
+
+             +o SSSSHH
+
+             +o TTOOKKEENN
+
+             +o SSIIGGVV44
+
+          cacheConfig -> (structure)
+             The cache configuration for the Amplify app. If you don't specify
+             the cache configuration ttyyppee , Amplify uses the default
+             AAMMPPLLIIFFYY__MMAANNAAGGEEDD setting.
+
+             type -> (string) [required]
+                The type of cache configuration to use for an Amplify app.
+
+                The AAMMPPLLIIFFYY__MMAANNAAGGEEDD cache configuration automatically applies
+                an optimized cache configuration for your app based on its
+                platform, routing rules, and rewrite rules.
+
+                The AAMMPPLLIIFFYY__MMAANNAAGGEEDD__NNOO__CCOOOOKKIIEESS cache configuration type is the
+                same as AAMMPPLLIIFFYY__MMAANNAAGGEEDD , except that it excludes all cookies
+                from the cache key. This is the default setting.
+
+                Possible values:
+
+                +o AAMMPPLLIIFFYY__MMAANNAAGGEEDD
+
+                +o AAMMPPLLIIFFYY__MMAANNAAGGEEDD__NNOO__CCOOOOKKIIEESS
+
+          webhookCreateTime -> (timestamp)
+             A timestamp of when Amplify created the webhook in your Git
+             repository.
+
+          wafConfiguration -> (structure)
+             Describes the Firewall configuration for the Amplify app.
+             Firewall support enables you to protect your hosted applications
+             with a direct integration with WAF.
+
+             webAclArn -> (string)
+                The Amazon Resource Name (ARN) for the web ACL associated with
+                an Amplify app.
+
+                Constraints:
+
+                +o min: 00
+
+                +o max: 551122
+
+                +o pattern: ^^aarrnn::aawwss::wwaaffvv22::..**
+
+              wafStatus -> (string)
+                The status of the process to associate or disassociate a web
+                ACL to an Amplify app.
+
+                Possible values:
+
+                +o AASSSSOOCCIIAATTIINNGG
+
+                +o AASSSSOOCCIIAATTIIOONN__FFAAIILLEEDD
+
+                +o AASSSSOOCCIIAATTIIOONN__SSUUCCCCEESSSS
+
+                +o DDIISSAASSSSOOCCIIAATTIINNGG
+
+                +o DDIISSAASSSSOOCCIIAATTIIOONN__FFAAIILLEEDD
+
+              statusReason -> (string)
+                The reason for the current status of the Firewall
+                configuration.
+
+                Constraints:
+
+                +o max: 11000000
+
+          jobConfig -> (structure)
+             The configuration details that apply to the jobs for an Amplify
+             app.
+
+             buildComputeType -> (string) [required]
+                Specifies the size of the build instance. Amplify supports
+                three instance sizes: SSTTAANNDDAARRDD__88GGBB , LLAARRGGEE__1166GGBB , and
+                XXLLAARRGGEE__7722GGBB . If you don't specify a value, Amplify uses the
+                SSTTAANNDDAARRDD__88GGBB default.
+
+                The following list describes the CPU, memory, and storage
+                capacity for each build instance type:
+                   STANDARD_8GB
+
+                +o vCPUs: 4
+
+                +o Memory: 8 GiB
+
+                +o Disk space: 128 GB
+
+                  LARGE_16GB
+
+                +o vCPUs: 8
+
+                +o Memory: 16 GiB
+
+                +o Disk space: 128 GB
+
+                  XLARGE_72GB
+
+                +o vCPUs: 36
+
+                +o Memory: 72 GiB
+
+                +o Disk space: 256 GB
+
+                 Possible values:
+
+                +o SSTTAANNDDAARRDD__88GGBB
+
+                +o LLAARRGGEE__1166GGBB
+
+                +o XXLLAARRGGEE__7722GGBB
+
+                                                                  CREATE-APP()

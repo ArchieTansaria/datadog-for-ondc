@@ -17,7 +17,8 @@
     "db:up": "docker compose -f docker/docker-compose.yml up -d",
     "db:down": "docker compose -f docker/docker-compose.yml down",
     "db:migrate": "npm run db:migrate -w @ondc-pulse/database",
-    "db:seed": "npm run db:seed -w @ondc-pulse/database"
+    "db:seed": "npm run db:seed -w @ondc-pulse/database",
+    "db:seed:demo": "npx tsx packages/database/prisma/seed-demo.ts"
   },
   "devDependencies": {
     "@aws-sdk/client-cloudformation": "^3.1136.0",

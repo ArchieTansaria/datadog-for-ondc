@@ -50,7 +50,7 @@ export default function OverviewPage() {
             </div>
             <div className="my-2">
               <span className="font-mono text-3xl md:text-[34px] font-semibold tracking-[-0.04em] text-white">
-                {metrics ? metrics.ordersCount.toLocaleString() : '...'}
+                {metrics && metrics.ordersCount !== undefined ? metrics.ordersCount.toLocaleString() : '...'}
               </span>
             </div>
             <div className="text-[11px] font-mono text-zinc-500 flex justify-between items-center pt-2 border-t border-white/[0.04]">
@@ -67,7 +67,7 @@ export default function OverviewPage() {
             </div>
             <div className="my-2">
               <span className="font-mono text-3xl md:text-[34px] font-semibold tracking-[-0.04em] text-white">
-                {metrics ? metrics.slaBreachesCount.toLocaleString() : '...'}
+                {metrics && metrics.slaBreachesCount !== undefined ? metrics.slaBreachesCount.toLocaleString() : '...'}
               </span>
             </div>
             <div className="text-[11px] font-mono text-zinc-500 flex justify-between items-center pt-2 border-t border-white/[0.04]">
@@ -84,7 +84,7 @@ export default function OverviewPage() {
             </div>
             <div className="my-2">
               <span className="font-mono text-3xl md:text-[34px] font-semibold tracking-[-0.04em] text-white">
-                {metrics ? metrics.activeExceptionsCount.toLocaleString() : '...'}
+                {metrics && metrics.activeExceptionsCount !== undefined ? metrics.activeExceptionsCount.toLocaleString() : '...'}
               </span>
             </div>
             <div className="text-[11px] font-mono text-zinc-500 flex justify-between items-center pt-2 border-t border-white/[0.04]">
@@ -101,7 +101,7 @@ export default function OverviewPage() {
             </div>
             <div className="my-2">
               <span className="font-mono text-3xl md:text-[34px] font-semibold tracking-[-0.04em] text-white">
-                {metrics ? (metrics.activeExceptionsCount === 0 ? 'NOMINAL' : 'DEGRADED') : '...'}
+                {metrics && metrics.activeExceptionsCount !== undefined ? (metrics.activeExceptionsCount === 0 ? 'NOMINAL' : 'DEGRADED') : '...'}
               </span>
             </div>
             <div className="text-[11px] font-mono text-zinc-500 flex justify-between items-center pt-2 border-t border-white/[0.04]">
@@ -130,7 +130,7 @@ export default function OverviewPage() {
           </div>
           
           <div className="relative w-full h-64 overflow-hidden">
-            {timeline ? (
+            {Array.isArray(timeline) ? (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={timeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <XAxis 

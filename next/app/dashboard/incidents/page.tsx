@@ -10,7 +10,7 @@ export default function IncidentsPage() {
   const [selectedIncident, setSelectedIncident] = useState<any>(null);
   const [isGeneratingRCA, setIsGeneratingRCA] = useState(false);
 
-  const incidents = data?.incidents || [];
+  const incidents = data?.data || [];
   
   const handleIncidentSelect = (incident: any) => {
     setSelectedIncident(incident);
