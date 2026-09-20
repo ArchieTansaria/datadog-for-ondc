@@ -1,0 +1,1 @@
+{"success":true,"output":"Prisma schema loaded from schema.prisma\nDatasource \"db\": PostgreSQL database \"ondc_pulse\", schema \"public\" at \"ondcpulsedatabasestack-auroradatabaseauroracluster-eao8mqlqv6ur.cluster-carm64im0d21.us-east-1.rds.amazonaws.com:5432\"\n\n1 migration found in prisma/migrations\n\n\nNo pending migrations to apply.\n"}

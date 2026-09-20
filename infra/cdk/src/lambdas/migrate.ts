@@ -40,6 +40,16 @@ export const handler = async (_event: unknown) => {
   console.log('Prepared DATABASE_URL. Starting migration...');
 
   try {
+    const action = (_event as { action?: string })?.action;
+
+    if (action === 'seed') {
+      console.log('Running seed script...');
+      const { seedDatabase } = await import('../../../../packages/database/prisma/smoke-test-seed');
+      await seedDatabase();
+      return { success: true, message: 'Seeding completed successfully' };
+    }
+
+    console.log('Running migration...');
     // 3. Execute prisma migrate deploy
     // The prisma executable is bundled in node_modules/prisma/build/index.js
     const prismaPath = path.resolve(__dirname, 'node_modules/prisma/build/index.js');

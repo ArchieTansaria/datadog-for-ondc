@@ -19,6 +19,10 @@ vi.mock('fs', () => ({
   existsSync: vi.fn(() => true),
 }));
 
+vi.mock('../../../../packages/database/prisma/smoke-test-seed', () => ({
+  seedDatabase: vi.fn(() => Promise.resolve()),
+}));
+
 describe('Migration Lambda', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,6 +51,26 @@ describe('Migration Lambda', () => {
       expect.stringContaining('migrate deploy --schema'),
       expect.any(Object)
     );
+  });
+
+  it('runs seed script when action is seed', async () => {
+    mockSend.mockResolvedValue({
+      SecretString: JSON.stringify({
+        username: 'dbuser',
+        password: 'dbpassword!',
+        host: 'localhost',
+        port: 5432,
+        dbname: 'ondc_pulse',
+      }),
+    });
+
+    const result = await handler({ action: 'seed' });
+    
+    expect(result.success).toBe(true);
+    expect(process.env.DATABASE_URL).toBe('postgresql://dbuser:dbpassword!@localhost:5432/ondc_pulse?schema=public');
+    
+    const { seedDatabase } = await import('../../../../packages/database/prisma/smoke-test-seed');
+    expect(seedDatabase).toHaveBeenCalled();
   });
 
   it('throws error if secret is missing required fields', async () => {
