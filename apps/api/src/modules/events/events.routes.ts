@@ -30,7 +30,7 @@ export const eventRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) 
     
     const fulfillmentState = message?.order?.fulfillments?.[0]?.state?.descriptor?.code;
     const existingMetadata = (order?.metadata as Record<string, unknown>) || {};
-    const currentFulfillmentState = existingMetadata.fulfillmentState;
+    const currentFulfillmentState = existingMetadata.fulfillmentState as string | undefined;
 
     const evalResult = stateMachineService.evaluate({
       domain: context.domain,
