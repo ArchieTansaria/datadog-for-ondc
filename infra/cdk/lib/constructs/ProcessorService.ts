@@ -38,18 +38,26 @@ export class ProcessorService extends Construct {
       bundling: {
         minify: true,
         sourceMap: true,
+        externalModules: ['@prisma/client', 'prisma', '@ondc-pulse/database'],
         commandHooks: {
-          beforeBundling(_inputDir: string, _outputDir: string): string[] {
-            return [];
+          beforeBundling(inputDir: string, _outputDir: string): string[] {
+            return [
+              `cd ${inputDir}/packages/database && npx prisma generate`
+            ];
           },
           beforeInstall(_inputDir: string, _outputDir: string): string[] {
             return [];
           },
           afterBundling(inputDir: string, outputDir: string): string[] {
             return [
-              `mkdir -p ${outputDir}/node_modules/.prisma/client`,
-              `cp ${inputDir}/node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node ${outputDir}/node_modules/.prisma/client/`,
-              `cp ${inputDir}/node_modules/.prisma/client/schema.prisma ${outputDir}/node_modules/.prisma/client/`
+              `mkdir -p ${outputDir}/node_modules/.prisma`,
+              `mkdir -p ${outputDir}/node_modules/@prisma`,
+              `mkdir -p ${outputDir}/node_modules/@ondc-pulse/database`,
+              `cp -R ${inputDir}/node_modules/.prisma/client ${outputDir}/node_modules/.prisma/`,
+              `cp -R ${inputDir}/node_modules/@prisma/client ${outputDir}/node_modules/@prisma/`,
+              `cp -R ${inputDir}/packages/database/dist ${outputDir}/node_modules/@ondc-pulse/database/`,
+              `cp ${inputDir}/packages/database/package.json ${outputDir}/node_modules/@ondc-pulse/database/`,
+              `rm -f ${outputDir}/node_modules/.prisma/client/libquery_engine-darwin*.node` // Remove unnecessary native engines
             ];
           },
         },
