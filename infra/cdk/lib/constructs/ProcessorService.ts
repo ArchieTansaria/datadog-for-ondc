@@ -29,8 +29,9 @@ export class ProcessorService extends Construct {
       memorySize: 1024,
       vpc: props.vpc,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+        subnetType: ec2.SubnetType.PUBLIC,
       },
+      allowPublicSubnet: true,
       environment: {
         DATABASE_SECRET_ARN: props.databaseSecret.secretArn,
         PROCESSING_QUEUE_URL: props.processingQueue.queueUrl,

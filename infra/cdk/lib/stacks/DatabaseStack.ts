@@ -33,7 +33,8 @@ export class DatabaseStack extends Stack {
       handler: 'handler',
       timeout: Duration.minutes(5),
       vpc: this.database.vpc,
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
+      allowPublicSubnet: true,
       securityGroups: [migrationSg],
       environment: {
         DATABASE_SECRET_ARN: this.database.cluster.secret?.secretArn || '',

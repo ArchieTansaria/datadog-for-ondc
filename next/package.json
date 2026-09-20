@@ -9,13 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.0.0",
     "@ondc-pulse/database": "*",
     "lucide-react": "^1.47.0",
     "next": "16.3.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
-    "swr": "^2.5.1"
+    "swr": "^2.5.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

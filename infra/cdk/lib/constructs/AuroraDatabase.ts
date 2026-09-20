@@ -16,13 +16,9 @@ export class AuroraDatabase extends Construct {
     super(scope, id);
 
     // 1. Create a VPC with isolated and public subnets
-    this.vpc = props?.vpc ?? new ec2.Vpc(this, 'DatabaseVpc', {
+    this.vpc = props?.vpc ?? new ec2.Vpc(this, 'OndcDatabaseVpc', {
       maxAzs: 2,
       subnetConfiguration: [
-        {
-          name: 'Isolated',
-          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
-        },
         {
           name: 'Public',
           subnetType: ec2.SubnetType.PUBLIC,
@@ -39,7 +35,7 @@ export class AuroraDatabase extends Construct {
     this.securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(5432), 'Allow public access');
 
     // 3. Create Aurora Serverless v2 PostgreSQL Cluster
-    this.cluster = new rds.DatabaseCluster(this, 'AuroraCluster', {
+    this.cluster = new rds.DatabaseCluster(this, 'AuroraClusterV2', {
       engine: rds.DatabaseClusterEngine.auroraPostgres({
         version: rds.AuroraPostgresEngineVersion.VER_15_14, // Highly compatible with Prisma
       }),
@@ -67,7 +63,7 @@ export class AuroraDatabase extends Construct {
     // This allows Lambdas in the isolated subnets to fetch the DB credentials
     this.vpc.addInterfaceEndpoint('SecretsManagerEndpoint', {
       service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
-      subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      subnets: { subnetType: ec2.SubnetType.PUBLIC },
       privateDnsEnabled: true,
     });
   }
