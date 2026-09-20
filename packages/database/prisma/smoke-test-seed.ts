@@ -5,6 +5,10 @@ export async function seedDatabase() {
   console.log('Seeding Smoke Test Data...');
 
   try {
+    // 0. Debug: Fetch applied migrations
+    const migrations = await prisma.$queryRaw`SELECT * FROM _prisma_migrations`;
+    console.log('Applied Migrations:', migrations);
+
     // 1. Check if the smoke test tenant already exists
     let tenant = await prisma.tenant.findUnique({
       where: { slug: 'smoke-test-tenant' },

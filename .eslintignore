@@ -4,3 +4,4 @@ scratch.js
 **/node_modules/**
 **/.next/**
 jest.config.js
+scripts/

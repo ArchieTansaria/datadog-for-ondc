@@ -11,7 +11,8 @@ export default tseslint.config(
       "scratch.js",
       "**/.next/**",
       "**/node_modules/**",
-      "**/jest.config.js"
+      "**/jest.config.js",
+      "scripts/"
     ]
   },
   {
