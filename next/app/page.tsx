@@ -21,7 +21,6 @@ export default function Home() {
             </nav>
           </div>
           <div className="flex items-center gap-4 font-mono text-xs">
-            <Link className="hidden sm:inline-block text-neutral-400 hover:text-white transition-colors" href="/login">Sign in</Link>
             <Link className="inline-flex items-center gap-1.5 bg-white text-black px-3.5 py-1.5 rounded-full text-xs font-medium font-sans hover:bg-neutral-200 transition-all duration-150 shadow-sm active:scale-95" href="/dashboard">
               <span>Enter Console</span>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 16 16">
