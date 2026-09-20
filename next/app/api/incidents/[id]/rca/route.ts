@@ -4,11 +4,12 @@ import { getRCAProvider } from '../../../../../lib/rca';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const incident = await prisma.incident.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         order: true
       }
@@ -33,7 +34,7 @@ export async function POST(
             provider: provider.name,
             evidence: rcaEvidence,
             generatedAt: new Date().toISOString()
-          }
+          } as any
         }
       }
     });

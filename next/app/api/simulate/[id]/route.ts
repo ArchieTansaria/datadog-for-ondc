@@ -3,10 +3,11 @@ import { prisma } from '../../../../lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } } // id is the transactionId
+  { params }: { params: Promise<{ id: string }> } // id is the transactionId
 ) {
   try {
-    const transactionId = params.id;
+    const resolvedParams = await params;
+    const transactionId = resolvedParams.id;
 
     // Fetch all events for this transaction
     const events = await prisma.orderEvent.findMany({
@@ -46,7 +47,7 @@ export async function GET(
       }
     }
 
-    const businessLogs = [];
+    const businessLogs: any[] = [];
     
     events.forEach(evt => {
       businessLogs.push({

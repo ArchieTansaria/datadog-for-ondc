@@ -50,7 +50,7 @@ describe('Simulator API', () => {
 
   it('GET /api/simulate/[id] should return polled business logs', async () => {
     const req = new Request('http://localhost/api/simulate/txn-1');
-    const response = await getSimulateStatus(req as any, { params: { id: 'txn-1' } });
+    const response = await getSimulateStatus(req as any, { params: Promise.resolve({ id: 'txn-1' }) });
     expect(response.status).toBe(200);
     const data = await response.json();
     

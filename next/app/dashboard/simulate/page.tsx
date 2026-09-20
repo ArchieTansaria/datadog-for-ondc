@@ -30,7 +30,7 @@ export default function SimulatorPage() {
   const [duplicateConfirm, setDuplicateConfirm] = useState(false);
   
   const [isRunning, setIsRunning] = useState(false);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<{timestamp: string, message: string, level: string}[]>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,55 +39,61 @@ export default function SimulatorPage() {
     }
   }, [logs]);
 
-  const runSimulation = () => {
+  const runSimulation = async () => {
     if (isRunning) return;
     setIsRunning(true);
-    setLogs([`[${new Date().toISOString()}] [INFO] Initializing synthetic trace...`]);
+    setLogs([{ timestamp: new Date().toISOString(), message: 'Initializing synthetic trace...', level: 'info' }]);
     
-    const sequence = [
-      { delay: 400, text: `[${new Date().toISOString()}] [INFO] Authenticating simulator client via API Key... OK` },
-      { delay: 800, text: `[${new Date().toISOString()}] [INFO] Generating mock context schema (v1.2.0-STABLE)` },
-      { delay: 1500, text: `[${new Date().toISOString()}] [INFO] Dispatching /search payload to ap-south-1.gw.ondc.org` },
-      { delay: 1800, text: `[${new Date().toISOString()}] [INFO] Received /on_search (Catalog returned 14 items)` },
-    ];
+    try {
+      const response = await fetch('/api/simulate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ dropAssignment, delayConfirm, duplicateConfirm })
+      });
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to start simulation');
+      }
 
-    let currentDelay = 1800;
+      setLogs(prev => [...prev, { timestamp: new Date().toISOString(), message: `Synthetic order dispatched. Transaction ID: ${data.transactionId}`, level: 'info' }]);
 
-    if (delayConfirm) {
-      sequence.push({ delay: currentDelay + 500, text: `[${new Date().toISOString()}] [WARN] Injecting 300s latency to /on_confirm callback` });
-      sequence.push({ delay: currentDelay + 2500, text: `[${new Date().toISOString()}] [ERROR] Gateway Timeout: BPP failed to respond to /confirm within SLA` });
-      currentDelay += 2500;
-    } else {
-      sequence.push({ delay: currentDelay + 600, text: `[${new Date().toISOString()}] [INFO] Dispatching /confirm payload...` });
-      sequence.push({ delay: currentDelay + 1000, text: `[${new Date().toISOString()}] [INFO] Received /on_confirm (Order Created)` });
-      currentDelay += 1000;
-    }
+      // Poll for status
+      const pollInterval = setInterval(async () => {
+        try {
+          const statusRes = await fetch(`/api/simulate/${data.transactionId}`);
+          const statusData = await statusRes.json();
+          
+          if (statusData.logs) {
+            setLogs([{ timestamp: new Date().toISOString(), message: `Tracking Transaction: ${data.transactionId}`, level: 'info' }, ...statusData.logs]);
+          }
 
-    if (duplicateConfirm) {
-      sequence.push({ delay: currentDelay + 200, text: `[${new Date().toISOString()}] [WARN] Injecting duplicate /on_confirm event` });
-      sequence.push({ delay: currentDelay + 400, text: `[${new Date().toISOString()}] [ERROR] Idempotency violation detected by network core` });
-      currentDelay += 400;
-    }
-
-    if (dropAssignment && !delayConfirm) {
-      sequence.push({ delay: currentDelay + 800, text: `[${new Date().toISOString()}] [WARN] Dropping /on_status (Logistics Assignment) packet` });
-      sequence.push({ delay: currentDelay + 3000, text: `[${new Date().toISOString()}] [ERROR] Terminal SLA Breach: Logistics provider unresponsive` });
-      currentDelay += 3000;
-    } else if (!delayConfirm) {
-      sequence.push({ delay: currentDelay + 800, text: `[${new Date().toISOString()}] [INFO] Received /on_status (Agent Assigned)` });
-      currentDelay += 800;
-    }
-
-    sequence.push({ delay: currentDelay + 600, text: `[${new Date().toISOString()}] [SUCCESS] Synthetic execution completed. Trace ID: syn_99f2b1a` });
-
-    sequence.forEach(({ delay, text }, index) => {
-      setTimeout(() => {
-        setLogs(prev => [...prev, text]);
-        if (index === sequence.length - 1) {
-          setIsRunning(false);
+          if (statusData.status === 'COMPLETED' || statusData.status === 'FAILED') {
+            clearInterval(pollInterval);
+            setIsRunning(false);
+            setLogs(prev => [...prev, { timestamp: new Date().toISOString(), message: `Simulation finished with status: ${statusData.status}`, level: statusData.status === 'FAILED' ? 'error' : 'success' }]);
+          }
+        } catch (err) {
+          console.error('Polling failed:', err);
         }
-      }, delay);
-    });
+      }, 3000);
+
+      // Timeout after 60s
+      setTimeout(() => {
+        clearInterval(pollInterval);
+        if (isRunning) {
+          setIsRunning(false);
+          setLogs(prev => [...prev, { timestamp: new Date().toISOString(), message: 'Simulation polling timed out (60s).', level: 'warn' }]);
+        }
+      }, 60000);
+
+    } catch (err: any) {
+      setLogs(prev => [...prev, { timestamp: new Date().toISOString(), message: err.message, level: 'error' }]);
+      setIsRunning(false);
+    }
   };
 
   return (
@@ -186,30 +192,23 @@ export default function SimulatorPage() {
             ) : (
               logs.map((log, i) => {
                 let colorClass = "text-zinc-300";
-                if (log.includes("[WARN]")) colorClass = "text-orange-400";
-                if (log.includes("[ERROR]")) colorClass = "text-rose-400";
-                if (log.includes("[SUCCESS]")) colorClass = "text-emerald-400";
-                if (log.includes("[INFO]")) colorClass = "text-zinc-400";
+                if (log.level === 'warn') colorClass = "text-orange-400";
+                if (log.level === 'error') colorClass = "text-rose-400";
+                if (log.level === 'success') colorClass = "text-emerald-400";
+                if (log.level === 'info') colorClass = "text-zinc-400";
                 
-                // Highlight the prefix
-                const prefixMatch = log.match(/^(\[.*?\]) (\[.*?\]) (.*)$/);
-                
-                if (prefixMatch) {
-                  return (
-                    <div key={i} className="flex gap-2 font-mono">
-                      <span className="text-zinc-600 shrink-0">{prefixMatch[1]}</span>
-                      <span className={`shrink-0 ${colorClass}`}>{prefixMatch[2]}</span>
-                      <span className={`${log.includes("[ERROR]") ? "text-rose-200" : "text-zinc-300"}`}>{prefixMatch[3]}</span>
-                    </div>
-                  );
-                }
-                
-                return <div key={i} className={colorClass}>{log}</div>;
+                return (
+                  <div key={i} className="flex gap-2 font-mono">
+                    <span className="text-zinc-600 shrink-0">[{new Date(log.timestamp).toLocaleTimeString()}]</span>
+                    <span className={`shrink-0 ${colorClass}`}>[{log.level.toUpperCase()}]</span>
+                    <span className={`${log.level === 'error' ? "text-rose-200" : "text-zinc-300"}`}>{log.message}</span>
+                  </div>
+                );
               })
             )}
             
             {isRunning && (
-              <div className="flex items-center gap-2 text-zinc-500 font-mono">
+              <div className="flex items-center gap-2 text-zinc-500 font-mono mt-2">
                 <span className="animate-pulse">_</span>
               </div>
             )}

@@ -32,7 +32,7 @@ describe('Incidents APIs', () => {
 
   it('GET /api/incidents/[id] should return incident details', async () => {
     const req = new Request('http://localhost/api/incidents/inc-1');
-    const response = await getIncidentDetail(req as any, { params: { id: 'inc-1' } });
+    const response = await getIncidentDetail(req as any, { params: Promise.resolve({ id: 'inc-1' }) });
     expect(response.status).toBe(200);
     const data = await response.json();
     
@@ -41,7 +41,7 @@ describe('Incidents APIs', () => {
 
   it('POST /api/incidents/[id]/rca should generate RCA and update metadata', async () => {
     const req = new Request('http://localhost/api/incidents/inc-1/rca', { method: 'POST' });
-    const response = await postRca(req as any, { params: { id: 'inc-1' } });
+    const response = await postRca(req as any, { params: Promise.resolve({ id: 'inc-1' }) });
     expect(response.status).toBe(200);
     const data = await response.json();
     
