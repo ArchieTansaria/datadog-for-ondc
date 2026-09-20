@@ -1,4 +1,4 @@
-import { PrismaClient } from '@ondc-pulse/database';
+import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;

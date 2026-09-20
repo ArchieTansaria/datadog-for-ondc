@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "npm run build --prefix ../packages/database && next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.0.0",
     "@ondc-pulse/database": "*",
+    "@prisma/client": "^5.22.0",
     "lucide-react": "^1.47.0",
     "next": "16.3.5",
     "react": "19.2.8",
