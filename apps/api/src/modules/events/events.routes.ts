@@ -1,9 +1,7 @@
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import { z } from 'zod';
 import { eventsRepository } from './events.repository.js';
 import { ordersRepository } from '../orders/orders.repository.js';
 import { stateMachineService } from './state-machine.service.js';
-import crypto from 'crypto';
 
 import { webhookPayloadSchema } from './schema.js';
 
@@ -73,6 +71,7 @@ export const eventRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) 
       protocolVersion: '1.2.0',
       environment: 'PROD',
       idempotencyKey: idempotencyKey,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rawPayload: request.body as any,
       processingStatus: 'PROCESSED',
       validationStatus: validationStatus

@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { buildApp } from '../../app.js';
 import { FastifyInstance } from 'fastify';
-import { prisma } from '@ondc-pulse/database';
+import { prisma, Tenant } from '@ondc-pulse/database';
 import crypto from 'crypto';
 
 describe('Events API Integration - Webhook Ingestion', () => {
   let app: FastifyInstance;
-  let tenantA: any;
+  let tenantA: Tenant;
   const API_KEY = `test-key-${crypto.randomUUID()}`;
   const TX_ID = `tx-${crypto.randomUUID()}`;
   const messageIdSearch = `msg-search-${crypto.randomUUID()}`;
@@ -25,11 +25,15 @@ describe('Events API Integration - Webhook Ingestion', () => {
     await app.close();
     
     // Teardown
-    await prisma.orderEvent.deleteMany({ where: { tenantId: tenantA.id } });
+    if (tenantA?.id) {
+      await prisma.orderEvent.deleteMany({ where: { tenantId: tenantA.id } });
+    }
     if (orderId) {
       await prisma.order.delete({ where: { id: orderId } });
     }
-    await prisma.tenant.delete({ where: { id: tenantA.id } });
+    if (tenantA?.id) {
+      await prisma.tenant.delete({ where: { id: tenantA.id } });
+    }
     
     await prisma.$disconnect();
   });

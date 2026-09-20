@@ -12,14 +12,14 @@ const { mockS3Send, mockSqsSend } = vi.hoisted(() => ({
 // Mock AWS SDK
 vi.mock('@aws-sdk/client-s3', () => ({
   S3Client: vi.fn(() => ({
-    send: (...args: any[]) => mockS3Send(...args)
+    send: (...args: unknown[]) => mockS3Send(...args)
   })),
   PutObjectCommand: vi.fn((input) => ({ input })),
 }));
 
 vi.mock('@aws-sdk/client-sqs', () => ({
   SQSClient: vi.fn(() => ({
-    send: (...args: any[]) => mockSqsSend(...args)
+    send: (...args: unknown[]) => mockSqsSend(...args)
   })),
   SendMessageCommand: vi.fn((input) => ({ input })),
 }));

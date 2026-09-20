@@ -10,6 +10,7 @@ vi.spyOn(child_process, 'spawnSync').mockImplementation((command, args, options)
       (s && typeof s === 'object' && s.constructor && s.constructor.name === 'WritableWorkerStdio') 
         ? 'pipe' 
         : s
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ) as any;
   }
   return originalSpawnSync(command, args, options);

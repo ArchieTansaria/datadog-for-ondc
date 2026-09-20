@@ -66,9 +66,15 @@ describe('Orders API & Auth Integration', () => {
     await app.close();
     
     // Teardown isolated test data
-    await prisma.orderEvent.deleteMany({ where: { orderId: orderA.id } });
-    await prisma.order.delete({ where: { id: orderA.id } });
-    await prisma.tenant.deleteMany({ where: { id: { in: [tenantA.id, tenantB.id] } } });
+    if (orderA?.id) {
+      await prisma.orderEvent.deleteMany({ where: { orderId: orderA.id } });
+      await prisma.order.delete({ where: { id: orderA.id } });
+    }
+    
+    const tenantIdsToDelete = [tenantA?.id, tenantB?.id].filter(Boolean);
+    if (tenantIdsToDelete.length > 0) {
+      await prisma.tenant.deleteMany({ where: { id: { in: tenantIdsToDelete } } });
+    }
     
     await prisma.$disconnect();
   });

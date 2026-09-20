@@ -1,8 +1,8 @@
 import { SQSEvent, SQSBatchResponse } from 'aws-lambda';
-import { prisma, Prisma } from '@ondc-pulse/database';
 import { z } from 'zod';
 // Use the state machine service from the API codebase
 import { stateMachineService } from '../../../../apps/api/src/modules/events/state-machine.service';
+import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 const canonicalEventSchema = z.object({
   eventId: z.string(),
@@ -18,8 +18,54 @@ const canonicalEventSchema = z.object({
   rawPayloadUri: z.string().optional(),
 });
 
+let isDbConfigured = false;
+export const resetDbConfigForTesting = () => { isDbConfigured = false; };
+const secretsClient = new SecretsManagerClient({});
+
+const configureDatabase = async () => {
+  if (isDbConfigured) return;
+
+  const secretArn = process.env.DATABASE_SECRET_ARN;
+  if (!secretArn) {
+    throw new Error('DATABASE_SECRET_ARN environment variable is missing');
+  }
+
+  const response = await secretsClient.send(new GetSecretValueCommand({ SecretId: secretArn }));
+  if (!response.SecretString) {
+    throw new Error('Secret string is empty');
+  }
+
+  const secret = JSON.parse(response.SecretString);
+  const { username, password, host, port, dbname } = secret;
+
+  if (!username || !password || !host || !port) {
+    throw new Error('Database secret is missing required fields');
+  }
+
+  const databaseName = dbname && dbname !== 'postgres' ? dbname : 'ondc_pulse';
+
+  // Construct PostgreSQL connection URL ensuring credentials are URL-safe
+  const encodedUser = encodeURIComponent(username);
+  const encodedPass = encodeURIComponent(password);
+  const databaseUrl = `postgresql://${encodedUser}:${encodedPass}@${host}:${port}/${databaseName}?schema=public`;
+
+  // Provide it to Prisma via process.env before the first query is executed
+  process.env.DATABASE_URL = databaseUrl;
+  isDbConfigured = true;
+};
+
 export const handler = async (event: SQSEvent): Promise<SQSBatchResponse> => {
   const batchItemFailures = [];
+
+  try {
+    await configureDatabase();
+  } catch (error) {
+    console.error('Failed to configure database:', error);
+    // If DB configuration fails, all records in the batch fail
+    return { batchItemFailures: event.Records.map(r => ({ itemIdentifier: r.messageId })) };
+  }
+
+  const { prisma, Prisma } = await import('@ondc-pulse/database');
 
   for (const record of event.Records) {
     try {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const handler = async (event: any) => {
   console.log('Metrics Engine received event:', JSON.stringify(event, null, 2));
 
