@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
-import { v4 as uuidv4 } from 'uuid';
 import { prisma } from '../../../lib/db';
 
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION || 'us-east-1' });
@@ -11,17 +10,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { dropAssignment, delayConfirm, duplicateConfirm } = body;
     
-    const transactionId = uuidv4();
-    const orderId = uuidv4();
-    const simulationId = uuidv4();
+    const transactionId = crypto.randomUUID();
+    const orderId = crypto.randomUUID();
+    const simulationId = crypto.randomUUID();
 
     // Create a simulation tracking record if needed, but for now we'll just track via Audit or metadata
     const startTime = new Date();
 
     const generateEvent = (action: string, offsetMs: number) => ({
-      eventId: uuidv4(),
+      eventId: crypto.randomUUID(),
       transactionId,
-      messageId: uuidv4(),
+      messageId: crypto.randomUUID(),
       orderId,
       action,
       eventType: action.toUpperCase(),
