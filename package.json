@@ -5,7 +5,8 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "infra/*"
+    "infra/*",
+    "next"
   ],
   "scripts": {
     "dev": "npm run dev -ws",

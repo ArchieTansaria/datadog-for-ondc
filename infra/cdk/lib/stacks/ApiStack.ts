@@ -6,6 +6,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { IngestionApi } from '../constructs/IngestionApi';
 import { ProcessorService } from '../constructs/ProcessorService';
+import { SlaEngine } from '../constructs/SlaEngine';
 
 export interface ApiStackProps extends StackProps {
   rawEventsBucket: s3.IBucket;
@@ -18,6 +19,7 @@ export interface ApiStackProps extends StackProps {
 export class ApiStack extends Stack {
   public readonly ingestionApi: IngestionApi;
   public readonly processorService: ProcessorService;
+  public readonly slaEngine: SlaEngine;
 
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
@@ -29,6 +31,12 @@ export class ApiStack extends Stack {
 
     this.processorService = new ProcessorService(this, 'ProcessorService', {
       processingQueue: props.processingQueue,
+      vpc: props.vpc,
+      databaseSecurityGroup: props.databaseSecurityGroup,
+      databaseSecret: props.databaseSecret,
+    });
+
+    this.slaEngine = new SlaEngine(this, 'SlaEngine', {
       vpc: props.vpc,
       databaseSecurityGroup: props.databaseSecurityGroup,
       databaseSecret: props.databaseSecret,
