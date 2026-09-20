@@ -1,4 +1,4 @@
-# ONDC Pulse
+# Pulse
 
 **Transaction-Level Observability for the Open Network for Digital Commerce**
 
