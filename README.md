@@ -73,5 +73,5 @@ To handle the unpredictable and spiky nature of ONDC webhook traffic without dro
 
 ---
 
-## 🛡️ License
+## License
 This project is licensed under the MIT License.
