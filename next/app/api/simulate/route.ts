@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { v4 as uuidv4 } from 'uuid';
-import { prisma } from '../../../../lib/db';
+import { prisma } from '../../../lib/db';
 
 const sqsClient = new SQSClient({ region: process.env.AWS_REGION || 'us-east-1' });
 const queueUrl = process.env.PROCESSOR_QUEUE_URL || 'local-mock-queue';
