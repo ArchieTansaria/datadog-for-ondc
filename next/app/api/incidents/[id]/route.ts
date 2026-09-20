@@ -31,3 +31,32 @@ export async function GET(
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const resolvedParams = await params;
+    const body = await request.json();
+    
+    const { status } = body;
+    
+    if (!status || !['RESOLVED', 'IGNORED', 'OPEN', 'ACKNOWLEDGED'].includes(status)) {
+      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+    }
+
+    const updatedIncident = await prisma.incident.update({
+      where: { id: resolvedParams.id },
+      data: { 
+        status,
+        ...(status === 'RESOLVED' || status === 'IGNORED' ? { resolvedAt: new Date() } : {})
+      },
+    });
+
+    return NextResponse.json(updatedIncident);
+  } catch (error) {
+    console.error('Failed to update incident:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}

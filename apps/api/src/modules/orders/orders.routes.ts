@@ -8,6 +8,12 @@ const idParamSchema = z.object({
 });
 
 export const orderRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
+  fastify.get('/', async (request, reply) => {
+    const tenantId = request.tenantId!;
+    const orders = await ordersRepository.findMany(tenantId);
+    return reply.send({ data: orders });
+  });
+
   fastify.get('/:id', async (request, reply) => {
     const { id } = idParamSchema.parse(request.params);
     const tenantId = request.tenantId!;

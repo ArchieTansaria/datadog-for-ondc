@@ -1,6 +1,19 @@
 import { prisma, Prisma } from '@ondc-pulse/database';
 
 export class OrdersRepository {
+  async findMany(tenantId: string) {
+    return prisma.order.findMany({
+      where: { tenantId },
+      orderBy: { lastEventAt: 'desc' },
+      take: 50,
+      include: {
+        incidents: {
+          where: { status: 'OPEN' }
+        }
+      }
+    });
+  }
+
   async findById(id: string, tenantId: string) {
     return prisma.order.findUnique({
       where: { 

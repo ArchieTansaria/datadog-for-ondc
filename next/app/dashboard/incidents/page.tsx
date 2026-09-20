@@ -160,6 +160,29 @@ export default function IncidentsPage() {
                     </button>
                   </div>
                 )}
+                
+                <div className="flex items-center gap-3 pt-4 border-t border-white/[0.08]">
+                  <button 
+                    onClick={async () => {
+                      await fetch(`/api/incidents/${selectedIncident.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'RESOLVED' }), headers: { 'Content-Type': 'application/json' } });
+                      mutate();
+                      setSelectedIncident({...selectedIncident, status: 'RESOLVED'});
+                    }}
+                    className="px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded text-[12px] font-mono transition-colors"
+                  >
+                    Resolve Incident
+                  </button>
+                  <button 
+                    onClick={async () => {
+                      await fetch(`/api/incidents/${selectedIncident.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'IGNORED' }), headers: { 'Content-Type': 'application/json' } });
+                      mutate();
+                      setSelectedIncident({...selectedIncident, status: 'IGNORED'});
+                    }}
+                    className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-white/[0.08] rounded text-[12px] font-mono transition-colors"
+                  >
+                    Ignore Anomaly
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex items-center justify-center h-full min-h-[300px] border border-white/[0.07] rounded-xl bg-[#0e0e11] text-zinc-500 font-mono text-[12px]">

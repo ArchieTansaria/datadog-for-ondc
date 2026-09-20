@@ -144,6 +144,34 @@ describe('Orders API & Auth Integration', () => {
     });
   });
 
+  describe('GET /api/v1/orders', () => {
+    it('should return 200 OK and an empty list for tenant with no orders', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: `/api/v1/orders`,
+        headers: { 'x-api-key': API_KEY_B }
+      });
+      expect(response.statusCode).toBe(200);
+      expect(response.json().data).toHaveLength(0);
+    });
+
+    it('should return 200 OK and a list of orders for valid request by owner', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: `/api/v1/orders`,
+        headers: { 'x-api-key': API_KEY_A }
+      });
+      expect(response.statusCode).toBe(200);
+      
+      const json = response.json();
+      expect(Array.isArray(json.data)).toBe(true);
+      expect(json.data).toHaveLength(1);
+      expect(json.data[0].id).toBe(orderA.id);
+      expect(json.data[0].tenantId).toBe(tenantA.id);
+      expect(json.data[0].currentState).toBe('INIT');
+    });
+  });
+
   describe('GET /api/v1/orders/:id/events', () => {
     it('should enforce tenant isolation for events', async () => {
       const response = await app.inject({

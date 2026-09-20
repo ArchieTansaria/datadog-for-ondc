@@ -146,7 +146,7 @@ export default function OverviewPage() {
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#141418', borderColor: 'rgba(255,255,255,0.1)', fontFamily: 'monospace', fontSize: 12 }}
                     itemStyle={{ color: '#fff' }}
-                    labelFormatter={(val) => new Date(val).toLocaleString()}
+                    labelFormatter={(val: any) => val ? new Date(val as string | number).toLocaleString() : ''}
                   />
                   <ReferenceLine y={2000} label={{ position: 'top', value: 'SLA LIMIT (2000ms)', fill: '#a1a1aa', fontSize: 10 }} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" />
                   <Line type="monotone" dataKey="p95" stroke="#ffffff" strokeWidth={1.5} dot={false} activeDot={{ r: 4, fill: '#fff' }} />
