@@ -42,6 +42,18 @@ export const handler = async (_event: unknown) => {
   try {
     const action = (_event as { action?: string })?.action;
 
+    if (action === 'query') {
+      const { PrismaClient } = await import('@prisma/client');
+      const prisma = new PrismaClient();
+      try {
+        const result = await prisma.$queryRaw`SELECT COUNT(*) FROM tenants;`;
+        console.log('Query result:', result);
+        return { success: true, data: result };
+      } finally {
+        await prisma.$disconnect();
+      }
+    }
+
     if (action === 'seed') {
       console.log('Running seed script...');
       const { seedDatabase } = await import('../../../../packages/database/prisma/smoke-test-seed');
