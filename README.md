@@ -51,7 +51,7 @@ To handle the unpredictable and spiky nature of ONDC webhook traffic without dro
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/datadog-for-ondc.git
+   git clone https://github.com/ArchieTansaria/pulse.git
    cd datadog-for-ondc
    ```
 2. Install dependencies (using npm workspaces):
