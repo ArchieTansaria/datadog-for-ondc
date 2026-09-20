@@ -15,7 +15,7 @@ export class AuroraDatabase extends Construct {
   constructor(scope: Construct, id: string, props?: AuroraDatabaseProps) {
     super(scope, id);
 
-    // 1. Create a VPC with isolated subnets across at least 2 AZs if one isn't provided
+    // 1. Create a VPC with isolated and public subnets
     this.vpc = props?.vpc ?? new ec2.Vpc(this, 'DatabaseVpc', {
       maxAzs: 2,
       subnetConfiguration: [
@@ -23,6 +23,10 @@ export class AuroraDatabase extends Construct {
           name: 'Isolated',
           subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
         },
+        {
+          name: 'Public',
+          subnetType: ec2.SubnetType.PUBLIC,
+        }
       ],
     });
 
@@ -32,26 +36,27 @@ export class AuroraDatabase extends Construct {
       description: 'Security group for Aurora PostgreSQL Database',
       allowAllOutbound: true,
     });
-    // Note: We do NOT allow 0.0.0.0/0 on port 5432.
-    // Applications/Lambdas will need to be granted access later via `this.securityGroup.addIngressRule(...)`
+    this.securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(5432), 'Allow public access');
 
     // 3. Create Aurora Serverless v2 PostgreSQL Cluster
     this.cluster = new rds.DatabaseCluster(this, 'AuroraCluster', {
       engine: rds.DatabaseClusterEngine.auroraPostgres({
         version: rds.AuroraPostgresEngineVersion.VER_15_14, // Highly compatible with Prisma
       }),
-      writer: rds.ClusterInstance.serverlessV2('Writer'),
+      writer: rds.ClusterInstance.serverlessV2('Writer', {
+        publiclyAccessible: true,
+      }),
       serverlessV2MinCapacity: 0.5,
       serverlessV2MaxCapacity: 2,
       vpc: this.vpc,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+        subnetType: ec2.SubnetType.PUBLIC,
       },
       securityGroups: [this.securityGroup],
       storageEncrypted: true,
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
       
-      // DO NOT expose publicly
+      // Public for demo purposes
       defaultDatabaseName: 'ondc_pulse',
       
       // Hackathon/Development removal policy
