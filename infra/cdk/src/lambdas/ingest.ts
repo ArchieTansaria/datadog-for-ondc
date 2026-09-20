@@ -57,6 +57,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
 
     // 3. Construct Canonical Event
+    const fulfillmentState = message?.order?.fulfillments?.[0]?.state?.descriptor?.code;
     const canonicalEvent = {
       eventId: context.message_id,
       transactionId: context.transaction_id,
@@ -68,6 +69,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       participantId: context.action.startsWith('on_') ? context.bpp_id : context.bap_id,
       participantRole: context.action.startsWith('on_') ? 'SELLER' : 'BUYER',
       domain: context.domain,
+      fulfillmentState: fulfillmentState,
       rawPayloadUri: `s3://${bucketName}/${s3Key}`
     };
 

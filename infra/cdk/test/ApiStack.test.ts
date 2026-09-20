@@ -136,4 +136,9 @@ describe('ApiStack', () => {
       },
     });
   });
+
+  it('removes EventBridge SLA implementation and does not schedule it', () => {
+    // Assert no EventBridge rules are created
+    template.resourceCountIs('AWS::Events::Rule', 0);
+  });
 });

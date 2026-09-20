@@ -50,6 +50,53 @@ export async function seedDatabase() {
     });
 
     console.log(`✅ Upserted Participant: ${participant.participantId} -> Tenant: ${tenant.id}`);
+
+    // 3. Upsert the buyer-app.com participant (needed for buyer-side actions: select, init, confirm)
+    const buyer = await prisma.participant.upsert({
+      where: {
+        tenantId_participantId_environment_domain: {
+          tenantId: tenant.id,
+          participantId: 'buyer-app.com',
+          environment: 'PROD',
+          domain: 'nic2004:52110',
+        }
+      },
+      update: {},
+      create: {
+        tenantId: tenant.id,
+        participantId: 'buyer-app.com',
+        participantType: 'BUYER',
+        participantName: 'Smoke Test Buyer App',
+        environment: 'PROD',
+        domain: 'nic2004:52110',
+        protocolVersion: '1.2.0',
+      },
+    });
+
+    console.log(`✅ Upserted Participant: ${buyer.participantId} -> Tenant: ${tenant.id}`);
+
+    // 4. Ensure one SLA rule exists: SEARCHED → SELECTED, 30s threshold
+    const existingRule = await prisma.sLARule.findFirst({
+      where: { tenantId: tenant.id, fromState: 'SEARCHED', toState: 'SELECTED' },
+    });
+
+    if (!existingRule) {
+      const rule = await prisma.sLARule.create({
+        data: {
+          tenantId: tenant.id,
+          name: 'Search to Select SLA',
+          fromState: 'SEARCHED',
+          toState: 'SELECTED',
+          thresholdMs: 30000, // 30 seconds
+          severity: 'HIGH',
+          enabled: true,
+        },
+      });
+      console.log(`✅ Created SLA Rule: ${rule.name} (${rule.id})`);
+    } else {
+      console.log(`✅ Found existing SLA Rule: ${existingRule.name} (${existingRule.id})`);
+    }
+
     console.log('\nDatabase is now seeded for the smoke test!');
   } finally {
     await prisma.$disconnect();

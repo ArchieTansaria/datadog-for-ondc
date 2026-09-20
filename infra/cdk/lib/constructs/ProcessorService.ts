@@ -33,6 +33,7 @@ export class ProcessorService extends Construct {
       },
       environment: {
         DATABASE_SECRET_ARN: props.databaseSecret.secretArn,
+        PROCESSING_QUEUE_URL: props.processingQueue.queueUrl,
       },
       // Since it's interacting with the DB, let's bundle it properly
       bundling: {
@@ -86,5 +87,8 @@ export class ProcessorService extends Construct {
         reportBatchItemFailures: true,
       })
     );
+
+    // Grant permission to send messages to the processing queue (for SLA checks)
+    props.processingQueue.grantSendMessages(this.processorLambda);
   }
 }

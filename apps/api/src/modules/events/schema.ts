@@ -14,6 +14,13 @@ export const webhookPayloadSchema = z.object({
   message: z.object({
     order: z.object({
       id: z.string().optional(),
+      fulfillments: z.array(z.object({
+        state: z.object({
+          descriptor: z.object({
+            code: z.string().optional(),
+          }).optional()
+        }).optional()
+      })).optional(),
     }).optional()
   }).optional()
 });

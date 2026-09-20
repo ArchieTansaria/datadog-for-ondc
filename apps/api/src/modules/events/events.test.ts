@@ -27,11 +27,7 @@ describe('Events API Integration - Webhook Ingestion', () => {
     // Teardown
     if (tenantA?.id) {
       await prisma.orderEvent.deleteMany({ where: { tenantId: tenantA.id } });
-    }
-    if (orderId) {
-      await prisma.order.delete({ where: { id: orderId } });
-    }
-    if (tenantA?.id) {
+      await prisma.order.deleteMany({ where: { tenantId: tenantA.id } });
       await prisma.tenant.delete({ where: { id: tenantA.id } });
     }
     
@@ -60,7 +56,7 @@ describe('Events API Integration - Webhook Ingestion', () => {
   it('should successfully ingest an on_search event and create a new order', async () => {
     const payload = {
       context: {
-        domain: 'nic2004:60232',
+        domain: 'nic2004:52110',
         action: 'on_search',
         bap_id: 'buyer.com',
         bpp_id: 'seller.com',
@@ -96,7 +92,7 @@ describe('Events API Integration - Webhook Ingestion', () => {
   it('should return idempotent success if the same message_id is sent twice', async () => {
     const payload = {
       context: {
-        domain: 'nic2004:60232',
+        domain: 'nic2004:52110',
         action: 'on_search',
         bap_id: 'buyer.com',
         bpp_id: 'seller.com',
@@ -123,7 +119,7 @@ describe('Events API Integration - Webhook Ingestion', () => {
     
     const payload = {
       context: {
-        domain: 'nic2004:60232',
+        domain: 'nic2004:52110',
         action: 'on_init',
         bap_id: 'buyer.com',
         bpp_id: 'seller.com',
